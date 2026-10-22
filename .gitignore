@@ -1,0 +1,40 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+*.egg-info/
+.pytest_cache/
+.DS_Store
+
+# Terraform
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+
+# Credentials (deploy.py) -- TF_VAR_* exported as env vars, no tfvars files used
+/credentials.env
+
+# Local Claude Code settings (machine-specific)
+/.claude/
+
+# Orchestrate per-user env files (contain WXO tokens / API keys)
+orchestrate/wxo-*.env
+
+# Private keys / certificates
+*.pem
+*.key
+
+# Bob MCP config (contains credentials)
+.bob/mcp.json
+!.bob/mcp.json.example
+
+# Orchestrate wxo.env (personal token file, no suffix)
+orchestrate/wxo.env
+app/support_portal/static/copilot-config.json
+**/.bedrock_agentcore.yaml
+**/.bedrock_agentcore/

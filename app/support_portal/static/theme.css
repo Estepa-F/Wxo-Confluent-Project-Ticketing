@@ -1,0 +1,307 @@
+/* Shared theme for the ticket-lifecycle attendee pages (new-ticket.html,
+   tickets.html, ticket-detail.html) plus support-admin.html, which reuses
+   the same panel/ticket-card/timeline/reply-composer classes rather than
+   inventing new ones. Same palette as dashboard.html's inline <style> --
+   extracted here since several pages now share it, rather than
+   duplicating ~150 lines each. dashboard.html/full.html keep their own
+   inline styles, mirroring these variable names and values (see theme.js
+   for the shared toggle logic). */
+
+:root {
+  --bg: #f5f6f9;
+  --bg-elevated: #ffffff;
+  --bg-elevated-2: #eef0f5;
+  --border: #d8dce6;
+  --border-soft: #e4e7ee;
+  --text: #1b1f2b;
+  --text-dim: #5b6478;
+  --text-dimmer: #8a91a3;
+  --accent: #2f66d6;
+  --accent-soft: rgba(47, 102, 214, 0.12);
+  --green: #1a9d68;
+  --green-soft: rgba(26, 157, 104, 0.12);
+  --amber: #b5790a;
+  --amber-soft: rgba(181, 121, 10, 0.12);
+  --red: #c93a46;
+  --red-soft: rgba(201, 58, 70, 0.12);
+  --silver: #6b7280;
+  --silver-soft: rgba(107, 114, 128, 0.12);
+  --bronze: #a15c2e;
+  --bronze-soft: rgba(161, 92, 46, 0.14);
+  --radius: 10px;
+}
+
+html[data-theme="dark"] {
+  --bg: #0a0d14;
+  --bg-elevated: #12161f;
+  --bg-elevated-2: #171c28;
+  --border: #232a3a;
+  --border-soft: #1b2130;
+  --text: #e7eaf2;
+  --text-dim: #9299ad;
+  --text-dimmer: #5c6478;
+  --accent: #4f8ff7;
+  --accent-soft: rgba(79, 143, 247, 0.14);
+  --green: #35d399;
+  --green-soft: rgba(53, 211, 153, 0.14);
+  --amber: #f5b942;
+  --amber-soft: rgba(245, 185, 66, 0.14);
+  --red: #f0616b;
+  --red-soft: rgba(240, 97, 107, 0.14);
+  --silver: #b8c0cf;
+  --silver-soft: rgba(184, 192, 207, 0.14);
+  --bronze: #d99a63;
+  --bronze-soft: rgba(217, 154, 99, 0.16);
+}
+
+* { box-sizing: border-box; }
+
+/* `hidden` must always win over any class's `display` rule -- without this,
+   an element combining `hidden` with a class like `.content` (display:
+   flex) silently ignores `hidden` since both selectors tie on specificity
+   and the author stylesheet applies after the browser's default one. */
+[hidden] { display: none !important; }
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 16px;
+}
+
+.app {
+  max-width: 430px;
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 84px; /* leave room for the fixed bottom nav */
+  /* Flex items default to min-width:auto, which for form controls
+     (select/input/textarea) is their intrinsic content-based size, not 0 --
+     without this, nested flex columns can't shrink them below that
+     intrinsic width, forcing real horizontal overflow at narrow (mobile)
+     viewport widths even though every control also has width:100%. */
+  min-width: 0;
+}
+
+/* ---------- top bar ---------- */
+.topbar {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 18px 10px;
+}
+.topbar-brand { display: flex; align-items: center; gap: 10px; }
+.topbar-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: var(--accent-soft); color: var(--accent);
+  display: flex; align-items: center; justify-content: center; flex: 0 0 auto;
+}
+.topbar-title { font-size: 1rem; font-weight: 650; }
+.user-greeting { font-size: 1rem; font-weight: 650; color: var(--text); white-space: nowrap; }
+.icon { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.8; }
+
+/* ---------- headings ---------- */
+.page-heading { padding: 4px 18px 14px; }
+.page-heading h1 { margin: 0 0 4px; font-size: 1.3rem; font-weight: 700; }
+.page-heading p { margin: 0; font-size: 0.85rem; color: var(--text-dimmer); }
+
+/* ---------- body content ---------- */
+.content { flex: 1 1 auto; padding: 0 18px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+
+/* ---------- cards / panels ---------- */
+.panel {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+
+/* ---------- buttons ---------- */
+.btn {
+  font-family: inherit; font-size: 1rem; font-weight: 650; cursor: pointer;
+  border-radius: 10px; border: 1px solid var(--border); background: var(--bg-elevated-2);
+  color: var(--text); padding: 14px 18px; display: inline-flex; align-items: center;
+  justify-content: center; gap: 8px; min-height: 44px;
+  transition: background 0.15s, border-color 0.15s, opacity 0.15s;
+}
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn-primary:hover:not(:disabled) { background: #4380e6; }
+.btn-secondary { background: transparent; color: var(--text-dim); }
+.btn-accent-soft { background: var(--accent-soft); border-color: transparent; color: var(--accent); }
+.btn-outline-red { background: transparent; border-color: var(--red); color: var(--red); }
+.btn-block { width: 100%; }
+
+/* ---------- theme toggle ---------- */
+.theme-toggle {
+  flex: 0 0 auto; display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border-radius: 999px; border: 1px solid var(--border);
+  background: var(--bg-elevated-2); color: var(--text-dim); cursor: pointer; padding: 0;
+}
+.theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+.theme-toggle .icon { width: 18px; height: 18px; }
+
+/* ---------- status pills ---------- */
+.status-pill {
+  display: inline-flex; align-items: center; gap: 6px; font-size: 0.72rem; font-weight: 700;
+  padding: 4px 11px; border-radius: 999px; text-transform: capitalize;
+}
+.status-pill::before { content: ''; width: 6px; height: 6px; border-radius: 50%; }
+.status-open { color: var(--red); background: var(--red-soft); }
+.status-open::before { background: var(--red); }
+.status-closed { color: var(--green); background: var(--green-soft); }
+.status-closed::before { background: var(--green); }
+.status-escalated { color: var(--red); background: var(--red-soft); }
+.status-escalated::before { background: var(--red); }
+
+/* ---------- urgency / sentiment badges (support-admin.html) ---------- */
+.badge {
+  display: inline-flex; align-items: center; font-size: 0.72rem; font-weight: 700;
+  padding: 3px 10px; border-radius: 999px; text-transform: capitalize;
+}
+.badge-urgency-low { color: var(--green); background: var(--green-soft); }
+.badge-urgency-medium { color: var(--amber); background: var(--amber-soft); }
+.badge-urgency-high { color: var(--red); background: var(--red-soft); }
+.badge-sentiment-positive { color: var(--green); background: var(--green-soft); }
+.badge-sentiment-neutral { color: var(--text-dim); background: var(--border-soft); }
+.badge-sentiment-negative { color: var(--red); background: var(--red-soft); }
+.badge-synthetic { color: var(--text-dim); background: var(--border-soft); }
+
+/* ---------- tier badge ---------- */
+.tier-badge {
+  display: inline-flex; align-items: center; font-size: 0.72rem; font-weight: 700;
+  padding: 3px 10px; border-radius: 999px;
+}
+.tier-badge.tier-gold   { color: var(--amber);  background: var(--amber-soft); }
+.tier-badge.tier-silver { color: var(--silver); background: var(--silver-soft); }
+.tier-badge.tier-bronze { color: var(--bronze); background: var(--bronze-soft); }
+
+/* ---------- forms ---------- */
+.field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.field-label { font-size: 0.78rem; color: var(--text-dim); font-weight: 600; }
+select.full, input.full, textarea.full {
+  width: 100%; min-width: 0; font-family: inherit; font-size: 0.95rem; background: var(--bg-elevated-2); color: var(--text);
+  border: 1px solid var(--border); border-radius: 9px; padding: 12px 12px; min-height: 44px;
+}
+textarea.full { min-height: 96px; resize: vertical; font-family: inherit; }
+.char-counter { align-self: flex-end; font-size: 0.68rem; color: var(--text-dimmer); }
+
+.segmented { display: flex; gap: 8px; }
+.segmented button {
+  flex: 1; font-family: inherit; font-size: 0.85rem; font-weight: 650; padding: 10px 6px;
+  border-radius: 9px; border: 1px solid var(--border); background: var(--bg-elevated-2);
+  color: var(--text-dim); cursor: pointer; min-height: 44px;
+}
+.segmented button.selected.low { background: var(--green-soft); border-color: var(--green); color: var(--green); }
+.segmented button.selected.medium { background: var(--amber-soft); border-color: var(--amber); color: var(--amber); }
+.segmented button.selected.high { background: var(--red-soft); border-color: var(--red); color: var(--red); }
+
+/* ---------- filter pills (My Tickets) ---------- */
+/* Wraps instead of scrolling horizontally -- spec section 34 explicitly
+   rules out horizontal scrolling on mobile. */
+.filter-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.filter-pill {
+  flex: 0 0 auto; font-size: 0.78rem; font-weight: 600; padding: 7px 14px; border-radius: 999px;
+  border: 1px solid var(--border); background: var(--bg-elevated-2); color: var(--text-dim); cursor: pointer;
+}
+.filter-pill.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+/* ---------- ticket list cards ---------- */
+.ticket-card {
+  display: block; text-decoration: none; color: inherit;
+  background: var(--bg-elevated); border: 1px solid var(--border-soft); border-radius: var(--radius);
+  padding: 14px 16px; position: relative;
+}
+.ticket-card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.ticket-number { font-size: 0.78rem; color: var(--text-dimmer); font-weight: 600; }
+.ticket-subject { font-size: 0.95rem; font-weight: 650; margin-bottom: 6px; }
+.ticket-meta { display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-dim); }
+.ticket-chevron { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--text-dimmer); }
+.empty-state {
+  text-align: center; color: var(--text-dimmer); font-size: 0.85rem; padding: 40px 20px;
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+}
+
+/* ---------- ticket detail header card ---------- */
+.detail-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.detail-subject { font-size: 1.1rem; font-weight: 700; margin: 0 0 6px; }
+.detail-meta { font-size: 0.8rem; color: var(--text-dim); margin-bottom: 10px; }
+.detail-created { font-size: 0.75rem; color: var(--text-dimmer); margin-bottom: 12px; }
+.detail-description { font-size: 0.88rem; color: var(--text); line-height: 1.5; padding-top: 10px; border-top: 1px solid var(--border-soft); }
+
+/* ---------- ticket info card ---------- */
+.info-row { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; font-size: 0.85rem; }
+.info-row-label { color: var(--text-dim); }
+.info-row-value { font-weight: 600; }
+.panel-title { font-size: 0.85rem; font-weight: 700; margin-bottom: 10px; }
+
+/* ---------- activity timeline ---------- */
+.timeline { display: flex; flex-direction: column; }
+.timeline-item { display: flex; gap: 12px; padding-bottom: 18px; position: relative; }
+.timeline-item:last-child { padding-bottom: 0; }
+.timeline-rail { display: flex; flex-direction: column; align-items: center; flex: 0 0 auto; }
+.timeline-dot { width: 11px; height: 11px; border-radius: 50%; flex: 0 0 auto; margin-top: 3px; }
+.timeline-line { width: 2px; flex: 1 1 auto; background: var(--border-soft); margin-top: 4px; }
+.timeline-item:last-child .timeline-line { display: none; }
+.timeline-dot.dot-blue { background: var(--accent); }
+.timeline-dot.dot-green { background: var(--green); }
+.timeline-dot.dot-amber { background: var(--amber); }
+.timeline-body { flex: 1 1 auto; min-width: 0; }
+.timeline-label { font-size: 0.88rem; font-weight: 650; }
+.timeline-time { font-size: 0.7rem; color: var(--text-dimmer); margin-bottom: 4px; }
+.timeline-message { font-size: 0.85rem; color: var(--text-dim); line-height: 1.5; white-space: pre-wrap; }
+
+/* ---------- reply composer ---------- */
+.reply-composer { display: flex; flex-direction: column; gap: 10px; }
+.reply-actions { display: flex; gap: 10px; }
+.reply-actions .btn { flex: 1; }
+.inline-status { font-size: 0.78rem; color: var(--text-dim); text-align: center; padding: 4px 0; }
+.inline-status.accent { color: var(--accent); font-weight: 600; }
+.inline-status.amber { color: var(--amber); font-weight: 600; }
+
+/* ---------- confirm dialog ---------- */
+.confirm-overlay {
+  position: fixed; inset: 0; background: rgba(4, 6, 10, 0.6);
+  display: flex; align-items: flex-end; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity 0.18s; z-index: 50;
+}
+.confirm-overlay.open { opacity: 1; pointer-events: auto; }
+.confirm-dialog {
+  width: 100%; max-width: 430px; background: var(--bg-elevated); border: 1px solid var(--border);
+  border-radius: 16px 16px 0 0; padding: 22px 18px calc(22px + env(safe-area-inset-bottom));
+  transform: translateY(12px); transition: transform 0.18s;
+}
+.confirm-overlay.open .confirm-dialog { transform: translateY(0); }
+.confirm-dialog h3 { margin: 0 0 8px; font-size: 1.05rem; }
+.confirm-dialog p { margin: 0 0 18px; font-size: 0.85rem; color: var(--text-dim); }
+.confirm-actions { display: flex; gap: 10px; }
+.confirm-actions .btn { flex: 1; }
+
+/* ---------- bottom nav ---------- */
+.bottom-nav {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  max-width: 430px; margin: 0 auto;
+  display: flex; background: var(--bg-elevated); border-top: 1px solid var(--border);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.bottom-nav a {
+  flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 10px 0 8px; text-decoration: none; color: var(--text-dimmer); font-size: 0.68rem; font-weight: 600;
+  min-height: 44px;
+}
+.bottom-nav a.active { color: var(--accent); }
+
+/* ---------- success state ---------- */
+.success-state { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 36px 20px 8px; gap: 14px; }
+.success-check {
+  width: 64px; height: 64px; border-radius: 50%; background: var(--green-soft); color: var(--green);
+  display: flex; align-items: center; justify-content: center;
+}
+.success-state h2 { margin: 0; font-size: 1.15rem; }
+.success-state p { margin: 0; font-size: 0.85rem; color: var(--text-dim); line-height: 1.5; }
+.success-actions { width: 100%; display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }

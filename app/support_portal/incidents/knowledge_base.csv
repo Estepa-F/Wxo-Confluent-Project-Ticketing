@@ -1,0 +1,446 @@
+"article_id","title","description","symptoms","apply_to","resolution","steps_to_fix"
+"KB-0001","Reset a forgotten password","Use this article when a customer cannot sign in because they forgot their password or their current password is no longer accepted.","Customer cannot remember the password; login fails with invalid credentials; customer asks how to reset access.","login","Reset the password using the password-recovery flow and sign in again with the new credentials.","1. Open the Sign in page.
+2. Select 'Forgot password'.
+3. Enter the email address linked to the account.
+4. Open the password-reset email.
+5. Create a new password that meets the password requirements.
+6. Return to the Sign in page and log in with the new password."
+"KB-0002","Password reset email not received","Troubleshooting for customers who request a password reset but do not receive the reset email.","No reset email arrives; customer has requested several reset links; password-recovery flow appears successful but inbox remains empty.","login, notification","Verify the account email, check filtered folders, wait briefly, and request a single fresh reset email.","1. Confirm the email address is spelled correctly.
+2. Check Spam, Junk, Promotions, and blocked-sender folders.
+3. Wait up to 10 minutes before requesting another email.
+4. Request one new password-reset email.
+5. Use only the most recent reset link because older links may expire.
+6. If no email arrives, contact support to verify the account email."
+"KB-0003","Account temporarily locked","Explains how to recover an account that has been temporarily locked after multiple unsuccessful sign-in attempts.","Message says account is locked; login is blocked after repeated attempts; correct credentials are rejected immediately.","login","Wait for the temporary lock to expire, then reset the password if the customer is unsure of the credentials.","1. Stop attempting to sign in for 15 minutes.
+2. After 15 minutes, retry once with the known password.
+3. If the password is uncertain, use 'Forgot password'.
+4. Complete the reset flow and sign in with the new password.
+5. If the account remains locked after 30 minutes, contact support."
+"KB-0004","Two-factor code not received","Troubleshooting for missing email or SMS verification codes during sign-in.","2FA code does not arrive; verification screen remains blocked; customer repeatedly requests a code.","login, notification","Verify the destination, avoid repeated resend attempts, and use the latest verification code.","1. Confirm the masked phone number or email shown on screen is correct.
+2. Check SMS filtering or email Spam/Junk folders.
+3. Wait two minutes before selecting 'Resend code'.
+4. Request only one new code.
+5. Enter the most recently received code.
+6. If the destination is outdated or inaccessible, contact support to recover the account."
+"KB-0005","Two-factor code rejected","Use when the verification code arrives but is shown as invalid or expired.","Customer receives a code but it fails; multiple codes were requested; code expires before it can be entered.","login","Generate a new code and use only the most recently issued code before it expires.","1. Return to the verification screen.
+2. Select 'Resend code' once.
+3. Wait for the new code to arrive.
+4. Ignore any previously received codes.
+5. Enter the newest code immediately.
+6. Check that the device date and time are set automatically."
+"KB-0006","Login page keeps reloading","Browser troubleshooting for a sign-in page that loops back to itself or refreshes after authentication.","Sign in appears successful but returns to login; page refreshes endlessly; user is signed out immediately.","login","Remove stale session data and retry with cookies enabled.","1. Close all E-Shop tabs.
+2. Clear cookies and site data for the E-Shop domain.
+3. Make sure browser cookies are enabled.
+4. Disable aggressive privacy or script-blocking extensions for the site.
+5. Open a new browser window and sign in again.
+6. If the issue persists, test in another supported browser."
+"KB-0007","Login fails in mobile app","Troubleshooting when the same account works on the website but not in the mobile application.","Web login succeeds; mobile app login fails; app reports an unexpected error.","login","Refresh the app session and ensure the customer is using the latest app version.","1. Confirm the same credentials work on the website.
+2. Force-close the mobile app.
+3. Check for an app update and install it.
+4. Restart the phone.
+5. Open the app and sign in again.
+6. If needed, remove and reinstall the app."
+"KB-0008","Unexpected login error","General steps for an unexpected or generic error displayed during sign-in.","Message such as 'Something went wrong' or 'Unexpected error'; no specific credential error is displayed.","login","Retry from a clean session and a supported browser or network.","1. Refresh the page once.
+2. Open the site in a private/incognito window.
+3. Disable VPN or proxy temporarily if one is in use.
+4. Try another supported browser.
+5. Try another network if available.
+6. If the error continues, contact support with the approximate time of the attempt."
+"KB-0009","Email address not recognized","Use when the sign-in or password reset form says no account exists for an email address.","Customer believes they have an account but email is not recognized; password reset says account not found.","login","Confirm the account was created with the same email address or sign-in provider.","1. Check for common spelling mistakes in the email address.
+2. Try any alternate email address that may have been used.
+3. If the account was created with Google, Apple, or another provider, use that sign-in method.
+4. Search previous E-Shop order emails to identify the account address.
+5. If the address is still unknown, contact support with a previous order number."
+"KB-0010","Session expires too quickly","Troubleshooting when customers are repeatedly signed out during normal use.","Customer is logged out after a short time; cart or account session disappears; page asks to sign in repeatedly.","login, checkout","Ensure browser storage is permitted and remove extensions or settings that delete cookies automatically.","1. Enable cookies for the E-Shop website.
+2. Disable settings that delete site data when the browser closes.
+3. Temporarily disable privacy extensions for the site.
+4. Clear old site data and sign in again.
+5. Avoid using private browsing for long shopping sessions.
+6. Test again in a standard browser window."
+"KB-0011","Change account email","Explains how a signed-in customer can update the email address used for the E-Shop account.","Customer wants to use another email; old email will be deactivated; notifications go to the wrong address.","login, notification","Update the email from account settings and complete verification of the new address.","1. Sign in to the E-Shop account.
+2. Open Account settings.
+3. Select Email or Contact information.
+4. Enter the new email address.
+5. Confirm the change using the verification message sent to the new address.
+6. Sign out and sign in again using the new email if requested."
+"KB-0012","Browser sign-in requirements","Basic browser requirements that can prevent authentication from completing normally.","Sign-in button does nothing; blank page after sign in; authentication works on one browser but not another.","login","Use a current supported browser with JavaScript and cookies enabled.","1. Update the browser to the latest available version.
+2. Enable JavaScript.
+3. Enable first-party cookies for the E-Shop site.
+4. Disable content blockers for the sign-in page.
+5. Reload the page.
+6. Retry sign in."
+"KB-0013","Checkout button does nothing","Troubleshooting when the customer selects Checkout or Continue but the page does not advance.","Button appears clickable but nothing happens; loading spinner never finishes; customer cannot reach payment.","checkout","Refresh checkout state and remove browser-side causes.","1. Confirm all required cart selections are complete.
+2. Refresh the checkout page.
+3. Check that required address fields are filled in.
+4. Disable browser extensions that block scripts.
+5. Retry in a private/incognito window.
+6. If needed, try another supported browser."
+"KB-0014","Cart empties during checkout","Use when products disappear from the cart while moving between cart and checkout.","Cart becomes empty; items vanish after sign in; checkout reports there are no products.","checkout, login","Restore the shopping session and rebuild the cart after signing in.","1. Sign in before adding the products again.
+2. Return to the cart and verify the items are present.
+3. Remove duplicate browser tabs containing older carts.
+4. Clear E-Shop cookies if the cart keeps resetting.
+5. Add the products again.
+6. Proceed directly to checkout."
+"KB-0015","Shipping address rejected","Guidance for valid addresses that the checkout form cannot verify.","Address is marked invalid; Continue button remains disabled; postal code or apartment number is rejected.","checkout","Enter the address in the expected postal format and remove unsupported characters.","1. Enter the recipient's full name.
+2. Use the official street name and house number.
+3. Put apartment, unit, or building information in Address line 2.
+4. Verify city, state/region, and postal code.
+5. Remove emojis or unusual punctuation.
+6. Select a suggested standardized address if one is offered."
+"KB-0016","No shipping option available","Use when checkout shows no delivery methods for an otherwise valid cart and address.","Delivery section is empty; message says no shipping methods; customer previously received deliveries to the same area.","checkout, order tracking","Revalidate the address and check whether a cart item has delivery restrictions.","1. Re-enter the shipping postal code.
+2. Confirm the destination country is correct.
+3. Review the cart for oversized, restricted, or marketplace items.
+4. Temporarily remove suspect items and refresh delivery options.
+5. Add items back one at a time to identify any restriction.
+6. If no method appears for a normal item, contact support."
+"KB-0017","Promo code not accepted","Troubleshooting for coupons or promotion codes rejected during checkout.","Code says invalid, expired, not applicable, or already used; expected discount is missing.","checkout","Confirm eligibility and enter the promotion exactly as provided.","1. Copy the promotion code without extra spaces.
+2. Check the promotion validity dates.
+3. Check minimum-spend requirements.
+4. Verify that the products in the cart are eligible.
+5. Remove other promotions if codes cannot be combined.
+6. Apply the code again before placing the order."
+"KB-0018","Promo code breaks checkout","Use when checkout reloads, freezes, or loses customer data after a promotion is applied.","Checkout page reloads; address or payment fields disappear; cart changes after applying a code.","checkout","Remove the promotion, refresh checkout, and apply it again only after the cart is stable.","1. Remove the promotion code.
+2. Refresh the cart page.
+3. Confirm item quantities and subtotal.
+4. Proceed to checkout and enter shipping information.
+5. Apply the promotion once.
+6. If the issue returns, complete the order without the code and contact support about the promotion."
+"KB-0019","Place order spins forever","Troubleshooting when the final order submission remains in a loading state.","Spinner never finishes; Place order remains disabled; customer is unsure whether the order was created.","checkout, payments","Check for an existing order before retrying to avoid duplicate payment attempts.","1. Do not press Place order repeatedly.
+2. Wait up to two minutes.
+3. Open My Orders in a separate tab and check for a new order.
+4. Check email for an order confirmation.
+5. If an order exists, do not retry payment.
+6. If no order exists, refresh checkout and try once more."
+"KB-0020","Checkout page keeps reloading","General browser troubleshooting for a checkout page that reloads or returns to an earlier step.","Checkout loops between steps; page refreshes after entering data; customer cannot reach confirmation.","checkout","Clear stale checkout data and retry in one browser tab.","1. Close duplicate E-Shop tabs.
+2. Clear E-Shop site data and cookies.
+3. Sign in again.
+4. Rebuild the cart.
+5. Proceed through checkout using a single tab.
+6. If necessary, use another supported browser."
+"KB-0021","Billing address mismatch","Use when payment cannot continue because the billing address does not match card details.","Payment form reports address mismatch; card is valid elsewhere; checkout returns to billing details.","checkout, payments","Enter the billing address exactly as recorded by the card issuer.","1. Select the correct country for the billing address.
+2. Enter the cardholder name as shown on the card.
+3. Use the billing street address registered with the bank.
+4. Verify postal code carefully.
+5. If shipping and billing addresses differ, disable 'Same as shipping'.
+6. Retry the payment once."
+"KB-0022","Guest checkout unavailable","Explains what to do when a customer expects guest checkout but is asked to sign in.","Checkout requires account access; guest option is missing; customer cannot proceed anonymously.","checkout, login","Sign in or create an account if the current cart or region requires authenticated checkout.","1. Check whether a 'Continue as guest' option is displayed.
+2. If not available, select Sign in.
+3. Sign in with an existing account or create a new account.
+4. Return to the cart.
+5. Continue checkout."
+"KB-0023","Item becomes unavailable at checkout","Use when an item is removed or marked unavailable after it was successfully added to the cart.","Item is in cart but checkout says out of stock; quantity is reduced automatically; checkout cannot continue.","checkout, search","Refresh inventory availability and update the cart before checkout.","1. Return to the cart.
+2. Refresh the page.
+3. Reduce the item quantity if requested.
+4. Remove any item marked unavailable.
+5. Search for an alternative variant or seller if appropriate.
+6. Proceed with the updated cart."
+"KB-0024","Checkout total changed","Explains common reasons why a total can change between cart and final checkout.","Final price is higher or lower than cart total; tax or shipping appears late; discount disappears.","checkout, payments","Review the final breakdown for shipping, tax, promotions, and quantity changes before confirming payment.","1. Open the order summary.
+2. Compare product quantities with the cart.
+3. Check shipping charges.
+4. Check taxes or regional fees.
+5. Confirm any promotion is still applied.
+6. Do not place the order if the amount is unexpected; contact support with a screenshot of the breakdown."
+"KB-0025","Card payment declined","Troubleshooting for a card declined during checkout even when the customer believes the card is valid.","Payment is declined; card works elsewhere; bank app may show no completed charge.","payments, checkout","Verify card details and billing address, then retry once or use another payment method.","1. Check card number, expiry date, and security code.
+2. Verify the billing address matches the bank records.
+3. Confirm sufficient funds or available credit.
+4. Retry the payment once.
+5. If declined again, contact the bank or use another payment method.
+6. Do not make repeated rapid attempts."
+"KB-0026","Charged but no order","Use when a customer sees a card authorization or charge but no order was created.","Bank shows charge or pending authorization; no order number; no confirmation email; My Orders is empty.","payments, checkout","Determine whether the payment is only a temporary authorization and avoid immediately paying again.","1. Check My Orders for a new order.
+2. Check order-confirmation email and Spam/Junk folders.
+3. Wait 15 minutes for delayed order creation.
+4. Check whether the bank entry is marked pending or completed.
+5. Do not submit another payment unless no order is confirmed.
+6. If the charge completes without an order, contact support with the amount, date, and last four card digits."
+"KB-0027","Duplicate card charge","Guidance when a customer sees two similar charges for one purchase.","Two card entries for the same amount; one order exists; customer believes they were billed twice.","payments","Check whether one transaction is a temporary authorization before opening a duplicate-charge investigation.","1. Open the banking app and inspect both transactions.
+2. Check whether one entry is marked pending or authorization.
+3. Compare the transaction dates and amounts.
+4. Confirm how many orders exist in My Orders.
+5. Wait for pending authorizations to clear according to the bank's normal timeline.
+6. If two charges fully settle for one order, contact support."
+"KB-0028","Payment pending","Explains pending card transactions and what the customer should do while authorization is unresolved.","Payment is marked pending; customer is unsure whether to retry; bank balance is temporarily reduced.","payments","Avoid duplicate attempts while a transaction is pending and verify whether an order was created.","1. Check My Orders.
+2. Check for a confirmation email.
+3. Review the bank transaction status.
+4. If an order exists, no further payment action is needed.
+5. If no order exists, wait for the pending authorization to release before retrying.
+6. Contact the bank if the pending authorization remains longer than its normal timeframe."
+"KB-0029","Refund not received","Use when an E-Shop refund is shown as completed but the customer cannot see the money in their account.","Refund status says completed; card statement does not show credit; customer has waited several days.","payments","Allow the bank's refund-processing window, then escalate with the refund reference if the credit still does not appear.","1. Confirm the refund status in the E-Shop account.
+2. Check the original payment method rather than another card or account.
+3. Review both posted and pending bank transactions.
+4. Allow 5-10 business days for card refunds unless the bank states otherwise.
+5. If still missing, contact the bank with the refund date.
+6. Contact support if the bank cannot locate the refund."
+"KB-0030","Apple Pay payment failed","Troubleshooting for Apple Pay authentication that completes but returns to checkout with an error.","Face ID/Touch ID succeeds but payment fails; Apple Pay sheet closes; checkout remains unpaid.","payments, checkout","Refresh Apple Pay payment details and retry once.","1. Check that the selected Apple Pay card is active.
+2. Verify the billing and shipping address in Apple Wallet.
+3. Return to checkout and confirm the order amount.
+4. Retry Apple Pay once.
+5. If it fails again, choose another card or payment method.
+6. Do not repeat the attempt rapidly."
+"KB-0031","PayPal returns to checkout","Use when PayPal authorization appears to complete but the customer returns to checkout without confirmation.","PayPal window closes; customer returns to checkout; no order confirmation appears.","payments, checkout","Check for an order before restarting the PayPal flow.","1. Wait one minute after returning from PayPal.
+2. Open My Orders and look for a new order.
+3. Check email for confirmation.
+4. If an order exists, do not pay again.
+5. If no order exists, return to checkout and retry PayPal once.
+6. If the loop continues, use another payment method."
+"KB-0032","Wrong amount charged","Use when the charged amount does not match the customer's expected checkout total.","Customer reports being overcharged or undercharged; card amount differs from remembered cart total.","payments, checkout","Compare the finalized order total with the card transaction and identify shipping, tax, discount, or currency differences.","1. Open the order details.
+2. Review item prices and quantities.
+3. Review shipping and taxes.
+4. Check whether a promotion was applied.
+5. Compare the final order total with the card transaction.
+6. If the settled card charge is different from the finalized order total, contact support."
+"KB-0033","Payment page error","General recovery steps for blank pages, error messages, or unexpected failures on the payment step.","Payment page is blank; generic error appears; payment fields never load; payment button is unavailable.","payments, checkout","Reload the payment step in a clean browser session before submitting payment again.","1. Check whether an order was already created.
+2. Refresh the checkout page.
+3. Disable script-blocking browser extensions for the site.
+4. Try a private/incognito window.
+5. Try another supported browser.
+6. Submit the payment only once after the page loads correctly."
+"KB-0034","Saved card cannot be used","Use when a stored payment method appears but cannot be selected or fails immediately.","Saved card is greyed out; expired card remains stored; payment fails before bank authorization.","payments","Remove the stale payment method and add the card again.","1. Open Account settings.
+2. Open Payment methods.
+3. Remove the affected saved card.
+4. Add the card again with the current expiry date and billing details.
+5. Return to checkout.
+6. Retry payment once."
+"KB-0035","Card verification failed","Troubleshooting for 3-D Secure or bank verification that does not complete.","Bank verification window fails; verification is cancelled; customer returns to checkout with payment declined.","payments","Complete bank verification in the issuer's flow and make sure pop-ups or redirects are allowed.","1. Retry payment once.
+2. Allow the bank verification window or redirect to open.
+3. Complete approval in the bank app or verification page.
+4. Return to the E-Shop browser tab.
+5. Wait for the payment result.
+6. If verification repeatedly fails, contact the card issuer or use another payment method."
+"KB-0036","Expired card at checkout","Use when payment fails because the stored or entered card has expired.","Expiry-date error; saved card cannot be authorized; customer recently received a replacement card.","payments","Use the replacement card and update the saved payment method.","1. Check the expiry date on the physical card.
+2. Remove the expired saved card if applicable.
+3. Enter the replacement card details.
+4. Verify the billing address.
+5. Save the new card only if desired.
+6. Retry checkout."
+"KB-0037","Exact product not found","Troubleshooting when searching for a known product name does not return the expected item.","Exact product name yields no result; old order links still open; customer knows the item exists.","search","Broaden the search and verify whether the product is still active or available in the selected region.","1. Search using only the main product name.
+2. Remove model numbers or punctuation.
+3. Clear all filters.
+4. Check the selected delivery country or store region.
+5. Browse the relevant category.
+6. If the product is still missing, it may no longer be searchable or available."
+"KB-0038","Search results are irrelevant","Use when search returns loosely related or unrelated products.","Top results do not match query; unrelated categories dominate; exact phrase is not prioritized.","search","Refine the query and use category filters to narrow results.","1. Use two or three specific keywords.
+2. Remove filler words.
+3. Select the relevant category filter.
+4. Apply brand or product-type filters.
+5. Sort only after filters are applied.
+6. Try an alternate common product name."
+"KB-0039","Search returns no results","General guidance for an empty search result page.","No products found; query previously worked; broad query unexpectedly returns zero items.","search","Remove restrictive filters and simplify the query.","1. Clear all active filters.
+2. Check spelling.
+3. Search for a shorter product term.
+4. Remove special characters.
+5. Verify the selected region or delivery country.
+6. Refresh and search again."
+"KB-0040","Filters not applied","Troubleshooting when selected filters do not change the displayed products.","Products outside chosen category remain visible; price filter appears ignored; checkbox is selected but results do not update.","search","Reset and reapply filters in a fresh search session.","1. Select 'Clear all filters'.
+2. Refresh the search page.
+3. Enter the search query again.
+4. Apply one filter at a time.
+5. Wait for results to refresh after each filter.
+6. If results remain unchanged, retry in another browser."
+"KB-0041","Sorting clears filters","Use when changing sort order resets previously selected search filters.","Customer applies filters, then sorting by price or rating removes them.","search","Rebuild the search state and apply sort after filters finish loading.","1. Clear filters and refresh the page.
+2. Enter the search query.
+3. Apply the desired filters.
+4. Wait for the product list to finish updating.
+5. Select the sort order.
+6. If filters disappear again, report the issue with the search query and selected filters."
+"KB-0042","Search is slow","Basic troubleshooting for search results that take unusually long to appear.","Search takes many seconds; loading indicator remains visible; other pages may load normally.","search","Reduce browser/network causes and simplify the search request.","1. Refresh the page.
+2. Clear unnecessary search filters.
+3. Try a simpler search term.
+4. Disable VPN temporarily if applicable.
+5. Try another network or browser.
+6. If delays continue across devices, report the approximate time and search query."
+"KB-0043","Search page keeps reloading","Use when scrolling or filtering repeatedly reloads the search page.","Page jumps to top; infinite scroll restarts; results vanish during scrolling.","search","Reset browser site data and retry without extensions that modify page content.","1. Close extra E-Shop tabs.
+2. Clear E-Shop cookies and cached site data.
+3. Disable content-blocking or shopping extensions.
+4. Open a new browser window.
+5. Search again.
+6. If the problem continues, test another supported browser."
+"KB-0044","Previously purchased item missing","Helps customers locate an item visible in order history but no longer returned by search.","Product can be opened from an old order but not found in current catalog search.","search, order tracking","Use the order-history product link and check whether the item is discontinued, hidden, or unavailable.","1. Open My Orders.
+2. Open the previous order containing the product.
+3. Select the product name or image.
+4. Check whether the page says unavailable or discontinued.
+5. Look for replacement or related products.
+6. If the page is active but search cannot find it, report the product ID to support."
+"KB-0045","Price filter shows wrong items","Use when products outside the chosen price range appear in results.","Items exceed maximum price; variant price differs from displayed starting price; filter seems inconsistent.","search","Confirm whether displayed prices are variant starting prices and reset the price range.","1. Open one affected product.
+2. Check whether the result shows a 'from' or starting price.
+3. Return to search.
+4. Clear the price filter.
+5. Re-enter the minimum and maximum values.
+6. Apply the filter again."
+"KB-0046","Category filter missing","Troubleshooting when an expected category is not available in search filters.","Customer cannot select a category; filter list is shorter than expected; category disappears for a query.","search","Broaden the query so the category becomes relevant to the result set.","1. Clear the current search.
+2. Search for the broader product type.
+3. Open the filter panel.
+4. Check available categories.
+5. Select the desired category if present.
+6. If still missing, browse directly through the category menu."
+"KB-0047","Search suggestions are wrong","Use when autocomplete suggestions do not match the customer's intended query.","Autocomplete shows unrelated phrases; suggestion changes intended spelling; expected product is absent.","search","Ignore autocomplete and submit the full query manually.","1. Type the complete product name.
+2. Do not select an unrelated suggestion.
+3. Press Enter or Search.
+4. Clear filters if results are too narrow.
+5. Use a shorter alternate query if needed."
+"KB-0048","Search works on one device only","Troubleshooting for search behavior that differs across browsers or devices.","Desktop search works but mobile does not, or vice versa; same account produces different results.","search","Refresh local browser/app data on the affected device.","1. Confirm the same store region is selected on both devices.
+2. Clear filters on the affected device.
+3. Refresh the browser or force-close the app.
+4. Clear site/app cache if available.
+5. Update the app or browser.
+6. Search again."
+"KB-0049","Order confirmation email missing","Use when an order exists but the customer has not received the order confirmation email.","Order visible in My Orders; no confirmation email; customer is unsure whether the order is valid.","notification, checkout","Verify the order in the account and check email filtering before resending or escalating.","1. Open My Orders and confirm the order exists.
+2. Check the email address in Account settings.
+3. Check Spam, Junk, Promotions, and filtered folders.
+4. Search the inbox for the order number or E-Shop.
+5. Wait up to 15 minutes.
+6. If still missing, contact support to request the confirmation again."
+"KB-0050","Duplicate email notifications","Troubleshooting for customers receiving the same transactional email more than once.","Same shipping or order email arrives multiple times; timestamps are close together.","notification","Confirm the messages refer to the same event and report persistent duplication.","1. Compare the order number in each email.
+2. Check whether the status text is identical.
+3. Keep one copy for reference.
+4. Do not click repeated action links multiple times.
+5. If duplicate messages continue for new events, contact support with the timestamps."
+"KB-0051","SMS notification not received","Use when expected text-message alerts do not arrive.","Order or security SMS missing; email may still work; phone number appears correct.","notification, login, order tracking","Verify the phone number, mobile coverage, and blocked-message settings.","1. Open Account settings and verify the full phone number and country code.
+2. Check that the phone can receive normal SMS messages.
+3. Review blocked numbers and spam filtering.
+4. Restart the phone if SMS delivery is generally delayed.
+5. Request the message only once if a resend option exists.
+6. If E-Shop SMS still never arrives, use email notifications and contact support."
+"KB-0052","Push notifications stopped","Troubleshooting for mobile push notifications that previously worked.","No push alerts; app still works; customer did not intentionally disable notifications.","notification","Re-enable notification permission and refresh the app registration.","1. Open phone Settings.
+2. Open Notifications and select the E-Shop app.
+3. Enable notifications.
+4. Open the E-Shop app and verify notification preferences.
+5. Force-close and reopen the app.
+6. If needed, sign out and sign in again."
+"KB-0053","Wrong order status email","Use when an email status conflicts with the status shown in the E-Shop account.","Email says cancelled while account says shipped; email says delivered but tracking differs.","notification, order tracking","Use My Orders and the carrier tracking page as the current status sources and report persistent contradictions.","1. Open My Orders.
+2. Open the affected order.
+3. Note the current E-Shop status.
+4. Open the carrier tracking link if available.
+5. Compare timestamps with the email.
+6. If the email is newer but clearly contradicts both systems, contact support."
+"KB-0054","Marketing emails continue","Explains how to stop promotional emails after the customer has opted out.","Customer unsubscribed but still gets newsletters or promotions; transactional order emails may still arrive.","notification","Update marketing preferences and allow time for the change to propagate.","1. Open the latest marketing email.
+2. Select the Unsubscribe link.
+3. Alternatively open Account settings and disable marketing email preferences.
+4. Save changes.
+5. Allow up to 48 hours for campaigns already queued.
+6. Transactional order and security emails may still be sent."
+"KB-0055","Too many notifications","Use when a customer wants fewer alerts without disabling important order updates.","Customer receives email, SMS, and push for the same event; notification volume feels excessive.","notification","Adjust notification channels and keep only the preferred methods.","1. Open Account settings.
+2. Open Notification preferences.
+3. Review email, SMS, and push channels.
+4. Disable nonessential marketing or promotional alerts.
+5. Keep transactional order notifications on at least one channel.
+6. Save changes."
+"KB-0056","Notification sent to old email","Use when messages continue going to a previous account email address.","Account email was changed but notifications still arrive at old address; new address gets none.","notification, login","Verify the account email change and complete any pending confirmation of the new address.","1. Open Account settings.
+2. Check the current email address.
+3. If a verification is pending, open the verification email sent to the new address.
+4. Complete verification.
+5. Sign out and sign in again.
+6. Place no test order; wait for the next normal notification event."
+"KB-0057","Shipping email link broken","Troubleshooting for links inside shipping notifications that return errors.","Tracking link opens 404; link does nothing; browser says page not found.","notification, order tracking","Open tracking from the account rather than relying on the email link.","1. Sign in to the E-Shop account.
+2. Open My Orders.
+3. Select the affected order.
+4. Open Tracking from the order page.
+5. If a carrier tracking number is shown, copy it directly to the carrier's website.
+6. Report the broken email link if the account link works."
+"KB-0058","Delayed notification email","Use when transactional emails arrive much later than the order event.","Confirmation or shipping email arrives hours late; account status updated much earlier.","notification","Rely on the account status for immediate confirmation and check whether email delivery is being filtered or delayed.","1. Check My Orders for the current status.
+2. Check Spam/Junk folders.
+3. Check whether the email provider is delaying messages.
+4. Avoid repeatedly triggering resend actions.
+5. If multiple E-Shop messages are consistently delayed, contact support with examples and timestamps."
+"KB-0059","Notification preferences not saving","Troubleshooting when notification toggles revert after saving.","Customer disables a channel but it reappears enabled; Save button seems ineffective.","notification","Refresh the settings session and save preferences again from one browser.","1. Open Account settings.
+2. Change one notification preference.
+3. Select Save.
+4. Refresh the page and verify the value.
+5. If it reverted, sign out and sign in again.
+6. Retry in another browser and contact support if settings still do not persist."
+"KB-0060","No delivery notification","Use when an order is delivered or out for delivery but no delivery alert was received.","Tracking status changes but no email, SMS, or push notification arrives.","notification, order tracking","Verify notification preferences and use order tracking as the primary delivery-status source.","1. Open Notification preferences.
+2. Confirm at least one transactional channel is enabled.
+3. Verify the email address or phone number.
+4. Open My Orders and check tracking.
+5. Check Spam/Junk for email alerts.
+6. If tracking updates but no transactional alerts arrive at all, contact support."
+"KB-0061","Tracking has not updated","Use when a package tracking status remains unchanged for an extended period.","Same carrier status for several days; package appears stuck; expected delivery date is approaching.","order tracking","Allow for carrier scan delays, then escalate if the status remains unchanged beyond the expected window.","1. Open My Orders and note the latest tracking timestamp.
+2. Open the carrier tracking page.
+3. Check whether the carrier lists service disruptions.
+4. Allow 24-48 hours between some transit scans.
+5. If there is no movement for more than 3 business days, contact the carrier or E-Shop support.
+6. Keep the order number and tracking number available."
+"KB-0062","Marked delivered but missing","Guidance when tracking says delivered but the customer cannot locate the package.","Carrier status says delivered; package is not at the door; customer did not receive it.","order tracking","Check common delivery locations and allow a short period for premature delivery scans before escalating.","1. Check the front door, mailbox, garage, reception, parcel locker, and safe-place locations.
+2. Ask household members or neighbors whether they accepted the parcel.
+3. Check the carrier tracking page for a delivery photo or location note.
+4. Wait until the end of the delivery day if the scan was recent.
+5. If still missing, contact the carrier.
+6. Then contact E-Shop support if the carrier cannot locate the package."
+"KB-0063","Tracking link returns 404","Use when the E-Shop tracking hyperlink is broken.","Tracking button opens Page not found; link in email is invalid; customer cannot access tracking.","order tracking, notification","Retrieve the tracking number from the order details and use the carrier website directly.","1. Sign in to the E-Shop account.
+2. Open My Orders.
+3. Select the affected order.
+4. Copy the tracking number.
+5. Open the named carrier's tracking website.
+6. Paste the tracking number into the carrier search."
+"KB-0064","Tracking number not recognized","Troubleshooting for a carrier page that says the tracking number does not exist.","Tracking number is invalid or unknown; shipment was recently dispatched.","order tracking","Allow time for the carrier to register the label before treating the tracking number as invalid.","1. Confirm the tracking number was copied completely.
+2. Confirm the correct carrier is being used.
+3. If shipment was created recently, wait up to 24 hours.
+4. Retry the carrier tracking page.
+5. If still unrecognized after 24-48 hours, contact support."
+"KB-0065","Package stuck in transit","Use when the carrier repeatedly shows the package at the same transit location.","No movement between depots; 'In transit' remains unchanged; delivery date passes.","order tracking","Check for carrier delays and escalate after a prolonged period without movement.","1. Open the carrier tracking details.
+2. Check the most recent physical scan location.
+3. Check carrier disruption notices.
+4. Wait one additional business day if the expected delivery date has not passed.
+5. If the delivery date has passed and there is no movement, contact the carrier.
+6. Contact E-Shop support if the carrier opens a lost-package investigation."
+"KB-0066","Delivery date changed","Explains why the estimated delivery date may move during fulfillment or transit.","Expected date becomes later; date changes multiple times; customer wants to know which date is current.","order tracking","Use the latest carrier estimate once the parcel has been handed over.","1. Open My Orders.
+2. Check whether the package has shipped.
+3. Open carrier tracking.
+4. Use the latest estimated date shown by the carrier after handoff.
+5. Check for weather or network-delay notices.
+6. Contact support if the package is beyond the latest estimated date with no tracking progress."
+"KB-0067","E-Shop and carrier statuses differ","Use when order status in the E-Shop account does not match the carrier's tracking page.","E-Shop says shipped while carrier says delivered; E-Shop says processing while carrier shows movement.","order tracking","Use the most recent timestamped carrier scan for physical parcel location while allowing E-Shop status to synchronize.","1. Compare the timestamp of the E-Shop status with the carrier's latest scan.
+2. Refresh the E-Shop order page.
+3. Allow several hours for systems to synchronize.
+4. For current physical location, rely on the latest carrier scan.
+5. If the mismatch lasts more than 24 hours after a major event such as delivery, contact support."
+"KB-0068","No tracking information yet","Use when an order is confirmed but no tracking number is available.","Order exists; status is processing or preparing; tracking section is empty.","order tracking","Tracking becomes available only after the parcel is prepared and handed to a carrier.","1. Open My Orders.
+2. Check the current fulfillment status.
+3. If status is Processing or Preparing, wait for dispatch.
+4. Look for a shipping confirmation email.
+5. Refresh the order page after the shipping notification arrives.
+6. Contact support only if the order is beyond its stated dispatch timeframe."
+"KB-0069","Partial order tracking","Explains how to track an order that ships in multiple packages.","Only some items arrived; multiple tracking numbers appear; order status says partially shipped.","order tracking","Track each package separately because items may leave different warehouses.","1. Open My Orders.
+2. Select the order.
+3. Expand shipment or package details.
+4. Identify each tracking number and its associated items.
+5. Track each package separately.
+6. Contact support only for the specific package that is late or missing."
+"KB-0070","Carrier says label created only","Use when tracking shows a shipping label but no carrier movement.","Status remains 'Label created', 'Pre-shipment', or 'Shipment information received'.","order tracking","Allow time for physical carrier handoff and first scan.","1. Check when the label was created.
+2. Allow up to 1-2 business days for warehouse handoff.
+3. Refresh carrier tracking after the next business day.
+4. If there is still no carrier acceptance scan after 2 business days, contact support."
+"KB-0071","Tracking shows wrong destination","Use when carrier tracking appears to show an incorrect city, region, or destination.","Tracking route seems to go to another city; customer fears shipping address is wrong.","order tracking, checkout","Verify the shipping address on the order before assuming the carrier route is incorrect.","1. Open the order details.
+2. Check the shipping address.
+3. If the address is correct, review the carrier's latest scan carefully because transit hubs may be in other cities.
+4. If the final destination shown by the carrier is clearly different, contact the carrier.
+5. Contact E-Shop support immediately if the order itself contains the wrong shipping address."
+"KB-0072","Order delayed after dispatch","General resolution for orders that have shipped but have missed their estimated delivery date.","Order is past due; package has tracking; customer wants next steps.","order tracking","Confirm the latest carrier status and escalate according to whether the parcel is still moving or has stopped.","1. Open the carrier tracking page.
+2. Check the latest scan date and location.
+3. Check for a revised delivery estimate.
+4. If scans are continuing, follow the latest carrier estimate.
+5. If there have been no scans for more than 3 business days, contact the carrier.
+6. Contact E-Shop support if the carrier declares the parcel lost or cannot provide an update."
+"KB-0073","Clear E-Shop browser data","General browser recovery procedure for stale sessions, looping pages, and inconsistent site behavior.","Pages reload unexpectedly; old data persists; login, checkout, or search behaves differently from another browser.","login, checkout, search, payments","Clear site-specific cookies and cached data, then start a fresh session.","1. Close all E-Shop tabs.
+2. Open the browser's site-data or privacy settings.
+3. Remove cookies and cached data for the E-Shop domain only.
+4. Close and reopen the browser.
+5. Open E-Shop and sign in again.
+6. Retry the original action."
+"KB-0074","Try a supported browser","Generic isolation step for issues that appear only in one browser.","Feature works on another device or browser; page elements are missing; buttons do not react.","login, checkout, payments, search","Retry the workflow in an up-to-date supported browser without extensions.","1. Update the current browser.
+2. Open a private/incognito window.
+3. Disable extensions for the E-Shop site.
+4. Retry the workflow.
+5. If it still fails, test a second supported browser.
+6. Report which browsers succeed and fail if support is required."
+"KB-0075","Check order creation before retrying","Prevents duplicate orders or charges when checkout or payment appears to fail after submission.","Customer sees spinner or error after pressing Place order; unsure whether payment succeeded.","checkout, payments","Verify My Orders and confirmation email before submitting payment again.","1. Do not press Place order again immediately.
+2. Open My Orders in a new tab.
+3. Look for an order created in the last few minutes.
+4. Check email for confirmation.
+5. Check the bank for a pending authorization.
+6. Retry only if no order exists and the previous payment attempt is clearly unsuccessful."
+"KB-0076","Verify account contact details","General procedure for making sure security and order messages go to the correct email address and phone number.","Customer is not receiving messages; notifications go to old contact details; verification destination is unexpected.","login, notification, order tracking","Update and verify contact information in Account settings.","1. Sign in to the account.
+2. Open Account settings.
+3. Review email address and phone number.
+4. Correct outdated information.
+5. Complete any email or phone verification step.
+6. Save the changes."

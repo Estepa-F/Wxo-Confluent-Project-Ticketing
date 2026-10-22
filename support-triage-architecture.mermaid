@@ -1,0 +1,57 @@
+flowchart TB
+    subgraph Attendee["Attendee / Presenter / Support Agent"]
+        Phone["Attendee phone\nGET / -> ticket form\nGET /tickets(/{id}) -> ticket lifecycle"]
+        Dash["Presenter dashboard\n/dashboard\n(incident/burst/generator controls +\nLive Triage Stream, replaces old /console)"]
+        SupportAdmin["Support Admin\n/support-admin\n(escalated queue + human reply)"]
+    end
+
+    subgraph Portal["support_portal (single Python app, publicly deployed behind CloudFront)"]
+        Web["FastAPI routes\n/ /tickets /status /admin/* /api/tickets"]
+        MCP["MCP tools (HTTP Basic auth)\nsearch_known_issues\nget_account_context"]
+        Gen["Background generator\nbaseline + on-cue burst\n(registers real TicketRecords)"]
+        Prod["Embedded Kafka producer"]
+        Cons["Background Kafka consumer\n-> WS broadcast\n(Avro for tickets.metrics, JSON elsewhere)"]
+        Store["In-memory TicketStore\n(lifecycle events, sentiment,\nescalated queue)"]
+    end
+
+    subgraph CC["Confluent Cloud (us-east-1)"]
+        Raw[("tickets.raw")]
+        Enriched[("tickets.enriched\nDISTRIBUTED BY ticket_id")]
+        Metrics[("tickets.metrics\npartitioned by service, avro")]
+        Actions[("tickets.agent-actions")]
+
+        Enrich["Flink: ticket enrichment\nAI_SENTIMENT(text, ARRAY[service])"]
+        Forecast["Flink: ticket metrics\n15min TUMBLE + ML_FORECAST (GA)\nper-service upsert, state-ttl=1d"]
+        Agent["triage_agent (single Streaming Agent)\nBedrock Claude Sonnet 4.5\nprompt: DECISION:/MESSAGE: contract\ntools: search_known_issues, get_account_context (MCP)"]
+        RTCE["Real-Time Context Engine\n(AWS-only, MCP)"]
+    end
+
+    Watsonx["watsonx Orchestrate\nSupport Ops Copilot agent"]
+
+    Phone -->|GET /, POST /api/tickets| Web
+    Phone -->|WS /ws/tickets/id| Store
+    Dash -->|POST /admin/status, /admin/burst, /admin/generator| Web
+    SupportAdmin -->|GET /admin/tickets/escalated,\nPOST .../support-reply| Store
+    Web --> Gen
+    Gen --> Prod
+    Web -->|create/reply| Store
+    Store -->|user_reply re-enters triage| Prod
+    Prod --> Raw
+
+    Raw --> Enrich --> Enriched
+    Raw --> Forecast --> Metrics
+
+    Agent -->|MCP over Basic auth| MCP
+    Enriched -->|"User ID: <id>\nTicket: <text>"| Agent
+    Agent -->|parsed DECISION/MESSAGE| Actions
+
+    Enriched --> RTCE
+    Metrics --> RTCE
+    Actions --> RTCE
+    RTCE -->|MCP| Watsonx
+
+    Actions -->|parse_agent_response| Store
+    Cons --> Enriched
+    Cons --> Metrics
+    Cons --> Actions
+    Cons -->|WebSocket| Dash

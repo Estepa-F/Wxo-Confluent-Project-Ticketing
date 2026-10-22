@@ -1,0 +1,43 @@
+##
+## customer_goodwill_agent.yaml
+##
+## External agent definition for Orchestrate. The AWS agent is hosted on
+## Bedrock AgentCore and called via A2A 0.3.0.
+##
+## rebuild_wxo.sh rewrites the api_url line from AGENTCORE_ARN before import.
+## Set AGENTCORE_ARN in your wxo.env to your deployed ARN.
+##
+spec_version: v1
+kind: external
+name: customer_goodwill_agent
+title: Goodwill Gesture (AWS)
+nickname: customer_goodwill_agent
+provider: external_chat/A2A/0.3.0
+description: |
+  Customer Relations team agent, hosted on AWS (Bedrock AgentCore).
+  Decides the commercial gesture for ONE escalated ticket. Expected input,
+  one field per line: tier (bronze, silver or gold), service, service_status
+  (operational, degraded or outage), recurring_issue_same_service (true or
+  false) and issue_summary (one or two sentences), without any personal data.
+  Output: a JSON object with the voucher amount in euros, extras
+  (free_shipping, priority_callback), whether human approval is required,
+  and a justification in French citing the policy.
+tags:
+  - dswt2026
+  - aws
+api_url: "https://bedrock-agentcore.us-east-1.amazonaws.com/runtimes/<ENCODED_ARN>/invocations?qualifier=DEFAULT"
+# Same format as the interface import (export from September 28):
+# BEARER_TOKEN with no token written here. The OAuth2 token comes from the
+# Orchestrate connection (client credentials on the Cognito pool wxo-a2a),
+# which renews it automatically.
+auth_scheme: BEARER_TOKEN
+auth_config: {}
+app_id: bedrock_cognito_a2a
+chat_params:
+  store: true
+  stream: false
+  pushNotifications: false
+  sendHistory: false
+config:
+  hidden: false
+  enable_cot: false

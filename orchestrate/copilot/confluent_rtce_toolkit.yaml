@@ -1,0 +1,16 @@
+# Remote MCP toolkit: the Confluent Real-Time Context Engine.
+# Set the url field to your cluster address:
+#   https://mcp.us-east-1.aws.confluent.cloud/mcp/v1/context-engine/organizations/<ORG_ID>/environments/<ENV_ID>/kafka-clusters/<LKC_ID>
+# rebuild_wxo.sh rewrites url from RTCE_URL when RTCE_URL is set in wxo.env.
+# Authentication: HTTP Basic with a Confluent Global API key (key:secret),
+# carried by the confluent_rtce connection (RTCE_KEY / RTCE_SECRET in wxo.env).
+spec_version: v1
+kind: mcp
+name: confluent_rtce
+description: Confluent Real-Time Context Engine (read access to the e-commerce support topics)
+transport: streamable_http
+url: https://mcp.us-east-1.aws.confluent.cloud/mcp/v1/context-engine/organizations/<ORG_ID>/environments/<ENV_ID>/kafka-clusters/<LKC_ID>
+tools:
+  - "*"
+connections:
+  - confluent_rtce

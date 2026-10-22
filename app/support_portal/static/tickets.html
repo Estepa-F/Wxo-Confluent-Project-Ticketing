@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="/static/theme.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>My Support Tickets</title>
+<link rel="stylesheet" href="/static/theme.css">
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="topbar-brand">
+      <div class="topbar-icon">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M4 6h16M4 6l1.5 11a1.5 1.5 0 0 0 1.5 1.3h9a1.5 1.5 0 0 0 1.5-1.3L19 6M9 6V4.5A1.5 1.5 0 0 1 10.5 3h3A1.5 1.5 0 0 1 15 4.5V6"/></svg>
+      </div>
+      <span class="topbar-title">E-Shop Support</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <span class="user-greeting" id="userGreeting"></span>
+      <span id="tierBadge" class="tier-badge" hidden></span>
+      <button type="button" class="theme-toggle" data-theme-toggle aria-label="Switch to dark theme">
+        <svg class="icon icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg class="icon icon-moon" viewBox="0 0 24 24" hidden><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="page-heading">
+    <h1>My Support Tickets</h1>
+    <p>Track the status of your requests.</p>
+  </div>
+
+  <div class="content">
+    <div class="filter-pills" id="filterPills">
+      <button class="filter-pill active" data-filter="all">All</button>
+      <button class="filter-pill" data-filter="open">Open</button>
+      <button class="filter-pill" data-filter="closed">Closed</button>
+    </div>
+
+    <div id="ticketList" style="display:flex; flex-direction:column; gap:10px;"></div>
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="/">
+      <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
+      New Ticket
+    </a>
+    <a href="/tickets" class="active">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M4 8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4z"/></svg>
+      My Tickets
+    </a>
+  </nav>
+</div>
+
+<script>
+  const STATUS_LABEL = { open: 'Open', closed: 'Closed' };
+  const SERVICE_LABEL = {
+    login: 'Login', checkout: 'Checkout', payments: 'Payments',
+    search: 'Search', notifications: 'Notifications', 'order-tracking': 'Order tracking',
+  };
+
+  let tickets = [];
+  let activeFilter = 'all';
+
+  function shortId(ticketId) {
+    return '#' + ticketId.replace(/-/g, '').slice(0, 5).toUpperCase();
+  }
+
+  function getCookie(name) {
+    const match = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
+    return match ? match[1] : null;
+  }
+
+  const userId = getCookie('user_id');
+  if (userId) document.getElementById('userGreeting').textContent = `User#${userId}`;
+
+  const tier = getCookie('tier');
+  if (tier) {
+    const badge = document.getElementById('tierBadge');
+    badge.textContent = tier.charAt(0).toUpperCase() + tier.slice(1);
+    badge.classList.add('tier-' + tier);
+    badge.hidden = false;
+  }
+
+  function relativeTime(iso) {
+    const diffMs = Date.now() - new Date(iso).getTime();
+    const mins = Math.max(0, Math.round(diffMs / 60000));
+    if (mins < 1) return 'just now';
+    if (mins < 60) return `${mins} min ago`;
+    const hours = Math.round(mins / 60);
+    if (hours < 24) return `${hours}h ago`;
+    return `${Math.round(hours / 24)}d ago`;
+  }
+
+  function render() {
+    const container = document.getElementById('ticketList');
+    const filtered = activeFilter === 'all' ? tickets : tickets.filter(t => t.status === activeFilter);
+
+    if (!tickets.length) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <div>No support tickets yet</div>
+          <div>Need help with something?<br>Create your first support request.</div>
+          <a class="btn btn-primary" href="/" style="margin-top:6px;">New Ticket</a>
+        </div>`;
+      return;
+    }
+
+    if (!filtered.length) {
+      container.innerHTML = `<div class="empty-state">No tickets match this filter.</div>`;
+      return;
+    }
+
+    container.innerHTML = filtered.map(t => `
+      <a class="ticket-card" href="/tickets/${t.ticket_id}">
+        <div class="ticket-card-top">
+          <span class="ticket-number">${shortId(t.ticket_id)}</span>
+          <span class="status-pill status-${t.status}">${STATUS_LABEL[t.status]}</span>
+        </div>
+        <div class="ticket-subject">${escapeHtml(t.subject)}</div>
+        <div class="ticket-meta">
+          <span>${SERVICE_LABEL[t.service] || t.service}</span>
+          <span>Updated ${relativeTime(t.updated_at)}</span>
+        </div>
+      </a>
+    `).join('');
+  }
+
+  function escapeHtml(s) {
+    const div = document.createElement('div');
+    div.textContent = s;
+    return div.innerHTML;
+  }
+
+  document.getElementById('filterPills').addEventListener('click', (e) => {
+    const btn = e.target.closest('.filter-pill');
+    if (!btn) return;
+    document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeFilter = btn.dataset.filter;
+    render();
+  });
+
+  async function load() {
+    try {
+      const res = await fetch('/api/tickets');
+      if (!res.ok) throw new Error('failed');
+      tickets = await res.json();
+      render();
+    } catch (e) {
+      document.getElementById('ticketList').innerHTML =
+        `<div class="empty-state">We couldn't load your tickets. Please try again.</div>`;
+    }
+  }
+
+  load();
+</script>
+</body>
+</html>

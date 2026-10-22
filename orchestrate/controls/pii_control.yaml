@@ -1,0 +1,54 @@
+##
+## pii_control.yaml
+##
+## PII control for act 2: masks personal data from the ticket BEFORE the
+## escalation agent's model reads it. What the model has never seen, it
+## cannot transmit to AWS (via the ask_goodwill_agent tool) or copy elsewhere.
+##
+## Why on the agent and not on the tool: in this instance, "PII Filter"
+## is an agent-only artifact (orchestrate controls list-types, September 28).
+## Tool artifacts are Guardrails, Output Length Guard, Rate Limiter,
+## SQLSanitizer and Secrets Detector.
+##
+## Limitations: the filter detects emails, cards, bank accounts, etc., but
+## neither first/last names nor French phone numbers ("06 12 34 56 78" passed
+## through in plain text in the September 28 test). Three custom patterns
+## cover the demo: "je suis / je m'appelle First Last", order numbers
+## (5+ digits) and French phone numbers (06…, +33…).
+## The agent prompt remains the second line of defence.
+##
+## Import: orchestrate controls import --file controls/pii_control.yaml
+##
+
+spec_version: v1
+kind: control
+control:
+  artifact_name: PII Filter
+  name: pii_escalation_input
+  display_name: PII - escalation agent input
+  description: >
+    Masks emails, phones, card and bank account numbers, announced names
+    ("je suis…"), and order numbers in tickets received by the escalation
+    agent, before any model processing.
+  hooks:
+    - agent_pre_invoke
+  priority: 10
+  config:
+    detect_email: true
+    detect_phone: true
+    detect_credit_card: true
+    detect_bank_account: true
+    detect_ip_address: true
+    detect_date_of_birth: true
+    default_mask_strategy: redact
+    redaction_text: "[REDACTED]"   # English redaction label — visible to support agents
+    block_on_detection: false
+    log_detections: true
+    include_detection_details: false
+    custom_patterns:
+      - "(?i)(?:je suis|je m'appelle|moi c'est)\\s+[A-ZÀ-Ý][a-zà-ÿ'-]+(?:\\s+[A-ZÀ-Ý][A-Za-zà-ÿ'-]+)?"
+      - "(?i)(?:i am|i'm|my name is|this is)\\s+[A-Z][a-z'-]+(?:\\s+[A-Z][A-Za-z'-]+)?"
+      - "\\b\\d{5,}\\b"
+      - "(?:\\+33\\s?|\\b0)[1-9](?:[\\s.-]?\\d{2}){4}\\b"
+  agent_names:
+    - escalation_agent

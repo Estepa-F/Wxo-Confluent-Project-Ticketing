@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="/static/theme.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Support Admin</title>
+<link rel="stylesheet" href="/static/theme.css">
+<style>
+  .ticket-card { cursor: pointer; }
+  .badge-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 8px; }
+  .meta-text { color: var(--text-dim); font-size: 0.75rem; }
+  .preview-text { color: var(--text-dim); font-size: 0.8rem; margin-top: 8px; display: block; }
+  .callout { border-radius: var(--radius); padding: 12px 14px; background: var(--red-soft); color: var(--text); font-size: 0.85rem; line-height: 1.5; }
+  .callout-title { font-weight: 700; color: var(--red); margin-bottom: 4px; }
+  .ai-panel { border: 1px solid var(--accent); }
+  .ai-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+  .ai-sub { color: var(--text-dim); font-size: 0.75rem; }
+  .ai-block { margin-top: 10px; }
+  .ai-block-title { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 4px; }
+  .ai-text { white-space: pre-wrap; font-size: 0.85rem; line-height: 1.5; }
+  .ai-reply { background: var(--bg-soft, rgba(127,127,127,0.08)); border-radius: var(--radius); padding: 10px 12px; }
+  .ai-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+  .badge-ai { background: var(--accent); color: #fff; }
+  .back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--accent); text-decoration: none; font-size: 0.85rem; font-weight: 600; background: none; border: none; padding: 0; cursor: pointer; }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="topbar-brand">
+      <div class="topbar-icon">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M4 6h16M4 6l1.5 11a1.5 1.5 0 0 0 1.5 1.3h9a1.5 1.5 0 0 0 1.5-1.3L19 6M9 6V4.5A1.5 1.5 0 0 1 10.5 3h3A1.5 1.5 0 0 1 15 4.5V6"/></svg>
+      </div>
+      <span class="topbar-title">E-Shop Support</span>
+    </div>
+    <button type="button" class="theme-toggle" data-theme-toggle aria-label="Switch to dark theme">
+      <svg class="icon icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      <svg class="icon icon-moon" viewBox="0 0 24 24" hidden><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+    </button>
+  </header>
+
+  <div class="page-heading">
+    <h1>Support Admin</h1>
+    <p>Manage escalated tickets and support customers.</p>
+  </div>
+
+  <div class="content" id="content">
+    <div class="panel" id="tokenPanel" hidden>
+      <div class="panel-title">Admin token required</div>
+      <div class="field">
+        <span class="field-label">Admin token</span>
+        <input class="full" id="tokenInput" type="password" placeholder="admin token" autocomplete="off" data-1p-ignore data-lpignore="true">
+      </div>
+      <button class="btn btn-primary btn-block" id="tokenSubmitBtn" style="margin-top:10px;">Unlock</button>
+      <div class="inline-status" id="tokenError" hidden>Invalid admin token.</div>
+    </div>
+
+    <div id="queueView" hidden>
+      <div class="panel" style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <svg class="icon" style="color:var(--red); width:22px; height:22px;" viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+          <div>
+            <div class="panel-title" style="margin-bottom:2px;">Escalated queue</div>
+            <div class="info-row-label">Tickets requiring human support</div>
+          </div>
+        </div>
+        <span class="status-pill status-escalated" id="queueCount">0</span>
+      </div>
+      <div id="queueList" style="display:flex; flex-direction:column; gap:10px;"></div>
+      <div class="empty-state" id="emptyState" hidden>
+        <div>Nothing escalated right now</div>
+        <div>All caught up! We'll notify you when new tickets are escalated.</div>
+      </div>
+      <div class="inline-status" id="queueError" hidden></div>
+    </div>
+
+    <div id="detailView" hidden>
+      <button type="button" class="back-link" id="backToQueueBtn">
+        <svg class="icon" style="width:16px; height:16px;" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+        Back to queue
+      </button>
+
+      <div class="panel">
+        <div class="detail-top">
+          <h1 class="detail-subject" id="detailSubject" style="margin:0;"></h1>
+          <span class="status-pill status-escalated">Escalated</span>
+        </div>
+        <div class="detail-description" id="detailDescription" style="border-top:none; padding-top:0;" hidden></div>
+        <div class="badge-row">
+          <span class="meta-text" id="detailService"></span>
+          <span class="badge" id="detailUrgency"></span>
+          <span class="meta-text" id="detailWaiting"></span>
+          <span class="ticket-number" id="detailTicketNumber"></span>
+        </div>
+      </div>
+
+      <div class="panel" id="sentimentPanel" hidden>
+        <div class="callout">
+          <span id="sentimentText"></span>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="callout">
+          <div class="callout-title">Escalation reason</div>
+          <div id="escalationReason"></div>
+        </div>
+      </div>
+
+      <div class="panel ai-panel" id="aiPanel" hidden>
+        <div class="ai-head">
+          <div>
+            <div class="panel-title" style="margin-bottom:2px;">Proposition watsonx Orchestrate</div>
+            <div class="ai-sub" id="aiSub">Agent d'escalade · geste commercial calculé par l'agent AWS · à valider avant envoi</div>
+          </div>
+          <span class="badge" id="aiStatus"></span>
+        </div>
+        <div id="aiBody"></div>
+        <div class="ai-actions">
+          <button class="btn btn-primary" id="aiUseBtn" hidden>Utiliser cette réponse</button>
+          <button class="btn btn-secondary" id="aiRequestBtn">Demander une proposition</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">Activity timeline</div>
+        <div class="timeline" id="detailTimeline"></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">Reply to customer</div>
+        <div class="reply-composer">
+          <div class="field">
+            <span class="field-label">Your reply</span>
+            <textarea class="full" id="replyText" maxlength="1500" placeholder="Type your reply here..."></textarea>
+            <span class="char-counter"><span id="replyCount">0</span>/1500</span>
+          </div>
+          <div class="inline-status">Response will be sent as Support Admin.</div>
+          <div class="reply-actions">
+            <button class="btn btn-secondary" id="clearReplyBtn">Clear</button>
+            <button class="btn btn-primary" id="sendReplyBtn" disabled>Send reply</button>
+          </div>
+          <div class="inline-status" id="replyStatus"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const SERVICE_LABEL = {
+    login: 'Login', checkout: 'Checkout', payments: 'Payments',
+    search: 'Search', notifications: 'Notifications', 'order-tracking': 'Order tracking',
+  };
+  const SENTIMENT_LABEL = { positive: 'Positive', neutral: 'Neutral', negative: 'Negative' };
+  // Same shape as ticket-detail.html's EVENT_META -- kept in sync manually
+  // (no shared JS module in this no-build-step app), not by design choice.
+  const EVENT_META = {
+    ticket_created: { label: 'Ticket created', dot: 'dot-blue', fallback: 'Customer submitted a support request.' },
+    automatic_reply: { label: 'Automatic reply', dot: 'dot-green', fallback: '' },
+    escalated: { label: 'Escalated to support', dot: 'dot-amber', fallback: '' },
+    user_reply: { label: 'Your reply', dot: 'dot-blue', fallback: '' },
+    support_reply: { label: 'Support reply', dot: 'dot-green', fallback: '' },
+    ticket_closed: { label: 'Ticket closed', dot: 'dot-green', fallback: 'This ticket has been closed.' },
+  };
+
+  let adminToken = sessionStorage.getItem('admin_token') || '';
+  let queue = [];
+  let currentTicketId = null;
+  let pollHandle = null;
+  let ws = null;
+
+  function escapeHtml(s) {
+    const d = document.createElement('div');
+    d.textContent = s || '';
+    return d.innerHTML;
+  }
+  // Same short-form ticket number as tickets.html/ticket-detail.html's
+  // shortId() -- there is no real sequential ticket number in this
+  // system, only a UUID (spec: specs/ticket-management/specs.md section 6).
+  function shortId(ticketId) {
+    return '#' + ticketId.replace(/-/g, '').slice(0, 5).toUpperCase();
+  }
+  function fmtShortTime(iso) {
+    return new Date(iso).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+  }
+  function waitingSince(iso) {
+    const mins = Math.max(0, Math.round((Date.now() - new Date(iso).getTime()) / 60000));
+    if (mins < 60) return `${mins}m waiting`;
+    return `${Math.floor(mins / 60)}h ${mins % 60}m waiting`;
+  }
+
+  async function adminGet(path) {
+    const res = await fetch(path, { headers: { 'X-Admin-Token': adminToken } });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.detail || res.statusText);
+    return data;
+  }
+  async function adminPost(path, body) {
+    const res = await fetch(path, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Admin-Token': adminToken },
+      body: JSON.stringify(body),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.detail || res.statusText);
+    return data;
+  }
+
+  // ---- token gate ----
+  function showTokenGate() {
+    document.getElementById('tokenPanel').hidden = false;
+    document.getElementById('queueView').hidden = true;
+    document.getElementById('detailView').hidden = true;
+  }
+
+  async function unlock() {
+    const value = document.getElementById('tokenInput').value.trim();
+    if (!value) return;
+    const previous = adminToken;
+    adminToken = value;
+    try {
+      await adminGet('/admin/tickets/escalated'); // validates the token before dismissing the gate
+      sessionStorage.setItem('admin_token', adminToken);
+      document.getElementById('tokenPanel').hidden = true;
+      document.getElementById('queueView').hidden = false;
+      startPolling();
+    } catch (e) {
+      adminToken = previous;
+      document.getElementById('tokenError').hidden = false;
+    }
+  }
+  document.getElementById('tokenSubmitBtn').addEventListener('click', unlock);
+  document.getElementById('tokenInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') unlock(); });
+
+  // ---- queue ----
+  function renderQueue() {
+    document.getElementById('queueCount').textContent = queue.length;
+    const list = document.getElementById('queueList');
+    const empty = document.getElementById('emptyState');
+    if (!queue.length) {
+      list.innerHTML = '';
+      empty.hidden = false;
+      return;
+    }
+    empty.hidden = true;
+    list.innerHTML = queue.map(t => `
+      <div class="ticket-card" data-ticket-id="${t.ticket_id}">
+        <div class="ticket-card-top">
+          <span class="meta-text">${SERVICE_LABEL[t.service] || t.service}</span>
+          <span class="ticket-number">${shortId(t.ticket_id)}</span>
+        </div>
+        <div class="ticket-subject">${escapeHtml(t.subject)}</div>
+        <div class="badge-row">
+          <span class="badge badge-urgency-${t.urgency}">${t.urgency}</span>
+          <span class="meta-text">${waitingSince(t.escalated_at)}</span>
+          ${t.sentiment ? `<span class="badge badge-sentiment-${t.sentiment}">${SENTIMENT_LABEL[t.sentiment]}</span>` : ''}
+          ${t.synthetic ? `<span class="badge badge-synthetic">Synthetic</span>` : ''}
+          ${t.ai_draft_status === 'ready' ? `<span class="badge badge-ai">Proposition prête</span>` : ''}
+          ${t.ai_draft_status === 'pending' ? `<span class="badge">Orchestrate…</span>` : ''}
+        </div>
+        <div class="preview-text">${escapeHtml(t.escalation_message || '')}</div>
+      </div>
+    `).join('');
+  }
+
+  document.getElementById('queueList').addEventListener('click', (e) => {
+    const card = e.target.closest('.ticket-card');
+    if (card) openTicket(card.dataset.ticketId);
+  });
+
+  async function refreshQueue() {
+    try {
+      // Read fresh each call (not cached at load) so a change made in the
+      // dashboard's "Demo controls" drawer takes effect on this tab's next
+      // poll, no reload needed.
+      const showSynthetic = localStorage.getItem('show_synthetic_tickets') === 'true';
+      queue = await adminGet('/admin/tickets/escalated' + (showSynthetic ? '?include_synthetic=true' : ''));
+      document.getElementById('queueError').hidden = true;
+      renderQueue();
+    } catch (e) {
+      document.getElementById('queueError').hidden = false;
+      document.getElementById('queueError').textContent = "We couldn't load the escalated queue. Retrying…";
+    }
+  }
+
+  function startPolling() {
+    refreshQueue();
+    if (pollHandle) clearInterval(pollHandle);
+    pollHandle = setInterval(() => {
+      if (document.getElementById('queueView').hidden) return; // only poll while the queue is visible
+      refreshQueue();
+    }, 5000);
+  }
+
+  // ---- detail / reply ----
+  async function openTicket(ticketId) {
+    try {
+      const ticket = await adminGet(`/admin/tickets/${ticketId}`);
+      currentTicketId = ticketId;
+      renderDetail(ticket);
+      document.getElementById('queueView').hidden = true;
+      document.getElementById('detailView').hidden = false;
+      connectWs(ticketId);
+    } catch (e) {
+      document.getElementById('queueError').hidden = false;
+      document.getElementById('queueError').textContent = "We couldn't load that ticket. Please try again.";
+    }
+  }
+
+  function renderDetail(ticket) {
+    document.getElementById('detailSubject').textContent = ticket.subject;
+    const descEl = document.getElementById('detailDescription');
+    if (ticket.description) {
+      descEl.textContent = ticket.description;
+      descEl.hidden = false;
+    } else {
+      descEl.hidden = true;
+    }
+    document.getElementById('detailService').textContent = SERVICE_LABEL[ticket.service] || ticket.service;
+    const urgencyEl = document.getElementById('detailUrgency');
+    urgencyEl.textContent = ticket.urgency;
+    urgencyEl.className = 'badge badge-urgency-' + ticket.urgency;
+
+    const escalatedEvent = [...ticket.events].reverse().find(e => e.type === 'escalated');
+    document.getElementById('detailWaiting').textContent = escalatedEvent ? waitingSince(escalatedEvent.created_at) : '';
+    document.getElementById('detailTicketNumber').textContent = shortId(ticket.ticket_id);
+    document.getElementById('escalationReason').textContent =
+      (escalatedEvent && escalatedEvent.message) || 'Your request needs additional review and has been escalated to support.';
+
+    const sentimentPanel = document.getElementById('sentimentPanel');
+    if (ticket.sentiment) {
+      sentimentPanel.hidden = false;
+      document.getElementById('sentimentText').innerHTML =
+        `Customer sentiment: <strong>${SENTIMENT_LABEL[ticket.sentiment]}</strong>`;
+    } else {
+      sentimentPanel.hidden = true;
+    }
+
+    renderTimeline(ticket.events);
+    renderDraft(ticket.ai_draft);
+  }
+
+  // ---- watsonx Orchestrate draft ----
+  let currentDraft = null;
+  let draftPoll = null;
+
+  function renderDraft(draft) {
+    currentDraft = draft;
+    const panel = document.getElementById('aiPanel');
+    const status = document.getElementById('aiStatus');
+    const body = document.getElementById('aiBody');
+    const useBtn = document.getElementById('aiUseBtn');
+    const reqBtn = document.getElementById('aiRequestBtn');
+    panel.hidden = false;
+    useBtn.hidden = true;
+    reqBtn.disabled = false;
+    if (draftPoll) { clearTimeout(draftPoll); draftPoll = null; }
+
+    if (!draft) {
+      status.textContent = 'Aucune';
+      body.innerHTML = '<div class="ai-sub">Pas encore de proposition pour ce ticket.</div>';
+      reqBtn.textContent = 'Demander une proposition';
+      return;
+    }
+    if (draft.status === 'pending') {
+      status.textContent = 'En cours…';
+      body.innerHTML = '<div class="ai-sub">L\'agent d\'escalade masque les données personnelles, consulte l\'agent AWS et rédige une proposition…</div>';
+      reqBtn.disabled = true;
+      draftPoll = setTimeout(() => {
+        if (currentTicketId) adminGet(`/admin/tickets/${currentTicketId}`).then(renderDetail).catch(() => {});
+      }, 3000);
+      return;
+    }
+    if (draft.status === 'error') {
+      status.textContent = 'Erreur';
+      body.innerHTML = `<div class="ai-sub">La proposition n'a pas pu être générée : ${escapeHtml(draft.error || '')}</div>`;
+      reqBtn.textContent = 'Réessayer';
+      return;
+    }
+    status.textContent = draft.seconds ? `Prête · ${draft.seconds} s` : 'Prête';
+    const block = (title, text, cls) => text ? `
+      <div class="ai-block">
+        <div class="ai-block-title">${title}</div>
+        <div class="ai-text ${cls || ''}">${escapeHtml(text)}</div>
+      </div>` : '';
+    body.innerHTML =
+      block('Réponse suggérée', draft.reponse_suggeree, 'ai-reply') +
+      block('Geste commercial proposé', draft.geste_commercial) +
+      block('Note pour le conseiller', draft.note_conseiller) +
+      (draft.via_topic ? `<div class="ai-sub" style="margin-top:10px;">Publiée dans le topic Confluent <strong>${escapeHtml(draft.via_topic)}</strong></div>` : '');
+    useBtn.hidden = !draft.reponse_suggeree;
+    reqBtn.textContent = 'Nouvelle proposition';
+  }
+
+  document.getElementById('aiUseBtn').addEventListener('click', () => {
+    if (!currentDraft || !currentDraft.reponse_suggeree) return;
+    replyText.value = currentDraft.reponse_suggeree.slice(0, 1500);
+    replyText.dispatchEvent(new Event('input'));
+    replyText.focus();
+  });
+
+  document.getElementById('aiRequestBtn').addEventListener('click', async () => {
+    if (!currentTicketId) return;
+    try {
+      await adminPost(`/admin/tickets/${currentTicketId}/ai-draft`, {});
+      renderDraft({ status: 'pending' });
+    } catch (e) {
+      document.getElementById('aiBody').innerHTML = `<div class="ai-sub">${escapeHtml(e.message)}</div>`;
+    }
+  });
+
+  function renderTimeline(events) {
+    // Oldest first -- spec: specs/ticket-management/specs.md section 3,
+    // matching ticket-lifecycle/spec.md section 11's own convention.
+    document.getElementById('detailTimeline').innerHTML = events.map(evt => {
+      const meta = EVENT_META[evt.type] || { label: evt.type, dot: 'dot-blue', fallback: '' };
+      const message = evt.message || meta.fallback;
+      return `
+        <div class="timeline-item">
+          <div class="timeline-rail">
+            <div class="timeline-dot ${meta.dot}"></div>
+            <div class="timeline-line"></div>
+          </div>
+          <div class="timeline-body">
+            <div class="timeline-label">${meta.label}</div>
+            <div class="timeline-time">${fmtShortTime(evt.created_at)}</div>
+            ${message ? `<div class="timeline-message">${escapeHtml(message)}</div>` : ''}
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  function backToQueue() {
+    disconnectWs();
+    if (draftPoll) { clearTimeout(draftPoll); draftPoll = null; }
+    currentTicketId = null;
+    document.getElementById('detailView').hidden = true;
+    document.getElementById('queueView').hidden = false;
+    resetComposer();
+    refreshQueue();
+  }
+  document.getElementById('backToQueueBtn').addEventListener('click', backToQueue);
+
+  // ---- reply composer ----
+  const replyText = document.getElementById('replyText');
+  const sendReplyBtn = document.getElementById('sendReplyBtn');
+
+  function resetComposer() {
+    replyText.value = '';
+    document.getElementById('replyCount').textContent = '0';
+    document.getElementById('replyStatus').textContent = '';
+    sendReplyBtn.disabled = true;
+  }
+
+  replyText.addEventListener('input', () => {
+    document.getElementById('replyCount').textContent = replyText.value.length;
+    sendReplyBtn.disabled = replyText.value.trim().length === 0;
+  });
+  document.getElementById('clearReplyBtn').addEventListener('click', resetComposer);
+
+  sendReplyBtn.addEventListener('click', async () => {
+    const message = replyText.value.trim();
+    if (!message || !currentTicketId) return;
+    sendReplyBtn.disabled = true;
+    document.getElementById('replyStatus').textContent = 'Sending…';
+    try {
+      await adminPost(`/admin/tickets/${currentTicketId}/support-reply`, { message });
+      document.getElementById('replyStatus').textContent = 'Reply sent.';
+      setTimeout(backToQueue, 600);
+    } catch (e) {
+      document.getElementById('replyStatus').textContent = "We couldn't send your reply. Your message has not been lost.";
+      sendReplyBtn.disabled = false;
+    }
+  });
+
+  // ---- live updates while a ticket is open (reuses the existing per-ticket WS) ----
+  function connectWs(ticketId) {
+    disconnectWs();
+    const proto = location.protocol === 'https:' ? 'wss' : 'ws';
+    ws = new WebSocket(`${proto}://${location.host}/ws/tickets/${ticketId}`);
+    ws.onmessage = (evt) => {
+      const msg = JSON.parse(evt.data);
+      if (msg.type === 'ticket_event' && msg.ticket_id === currentTicketId) {
+        adminGet(`/admin/tickets/${currentTicketId}`).then(renderDetail).catch(() => {});
+      }
+    };
+    ws.onerror = () => { if (ws) ws.close(); };
+  }
+  function disconnectWs() {
+    if (ws) { ws.onmessage = null; ws.onerror = null; ws.close(); ws = null; }
+  }
+
+  // ---- boot ----
+  if (adminToken) {
+    document.getElementById('queueView').hidden = false;
+    startPolling();
+  } else {
+    showTokenGate();
+  }
+</script>
+<script src="/static/copilot-embed.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+##
+## goodwill_policy_advisor.yaml
+##
+## External agent definition for Orchestrate.
+## Declared as a collaborator of the Support Ops Copilot.
+## Replaced by add_policy_advisor.sh from POLICY_ADVISOR_ARN.
+##
+spec_version: v1
+kind: external
+name: goodwill_policy_advisor
+title: Commercial Policy Advisor (AWS)
+nickname: goodwill_policy_advisor
+provider: external_chat/A2A/0.3.0
+description: |
+  Customer Relations team agent, hosted on AWS (Bedrock AgentCore).
+  Answers in French questions about the commercial gesture policy:
+  what voucher for which customer tier (bronze, silver, gold) and which
+  severity (service operational, degraded or outage), adjustments for
+  recurring issues, priority callback, 30-euro ceiling, cases requiring
+  human approval, and what is forbidden (refunds).
+  Use for any question about the rules or the calculation of a gesture,
+  not for live support data.
+tags:
+  - dswt2026
+  - aws
+# Replaced by add_policy_advisor.sh from POLICY_ADVISOR_ARN
+api_url: "https://bedrock-agentcore.us-east-1.amazonaws.com/runtimes/ARN_ENCODE/invocations?qualifier=DEFAULT"
+# Same authentication as customer_goodwill_agent: OAuth2 token provided and
+# renewed by the Orchestrate connection (client credentials, Cognito pool).
+auth_scheme: BEARER_TOKEN
+auth_config: {}
+app_id: bedrock_cognito_a2a
+chat_params:
+  store: true
+  stream: false
+  pushNotifications: false
+  sendHistory: false
+config:
+  hidden: false
+  enable_cot: false

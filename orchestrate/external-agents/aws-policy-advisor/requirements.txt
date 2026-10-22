@@ -1,0 +1,7 @@
+strands-agents[a2a]
+bedrock-agentcore[a2a]
+# Orchestrate parle A2A 0.3.0 : rester sur la branche 0.3 du SDK
+a2a-sdk>=0.3,<1.0
+# Traces vers watsonx Orchestrate (wxo_tracing.py)
+opentelemetry-sdk
+opentelemetry-exporter-otlp-proto-http

@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "confluent-rtce": {
+      "type": "streamable-http",
+      "url": "https://mcp.us-east-1.aws.confluent.cloud/mcp/v1/context-engine/organizations/<ORG_ID>/environments/<ENV_ID>/kafka-clusters/<LKC_ID>",
+      "headers": {
+        "Authorization": "Basic <BASE64_RTCE_KEY:SECRET>"
+      },
+      "disabled": false
+    },
+    "support-portal-mcp": {
+      "type": "streamable-http",
+      "url": "https://<CLOUDFRONT_DOMAIN>/mcp",
+      "headers": {
+        "Authorization": "Basic <BASE64_MCP_USERNAME:PASSWORD>"
+      },
+      "disabled": false
+    }
+  }
+}

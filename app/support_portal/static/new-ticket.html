@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="/static/theme.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>E-Shop Support</title>
+<link rel="stylesheet" href="/static/theme.css">
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="topbar-brand">
+      <div class="topbar-icon">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M4 6h16M4 6l1.5 11a1.5 1.5 0 0 0 1.5 1.3h9a1.5 1.5 0 0 0 1.5-1.3L19 6M9 6V4.5A1.5 1.5 0 0 1 10.5 3h3A1.5 1.5 0 0 1 15 4.5V6"/></svg>
+      </div>
+      <span class="topbar-title">E-Shop Support</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <span class="user-greeting" id="userGreeting"></span>
+      <span id="tierBadge" class="tier-badge" hidden></span>
+      <button type="button" class="theme-toggle" data-theme-toggle aria-label="Switch to dark theme">
+        <svg class="icon icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg class="icon icon-moon" viewBox="0 0 24 24" hidden><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div id="formView">
+    <div class="page-heading">
+      <h1>New Support Ticket</h1>
+      <p>Tell us what's going on and we'll take care of it.</p>
+    </div>
+
+    <div class="content">
+      <button type="button" class="btn btn-accent-soft btn-block" id="generateBtn">✨ Generate a random ticket</button>
+
+      <div class="field">
+        <span class="field-label">Service</span>
+        <select class="full" id="service">
+          <option value="" disabled selected>Select a service</option>
+          <option value="login">Login</option>
+          <option value="checkout">Checkout</option>
+          <option value="payments">Payments</option>
+          <option value="search">Search</option>
+          <option value="notifications">Notifications</option>
+          <option value="order-tracking">Order tracking</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <span class="field-label">Subject</span>
+        <input class="full" id="subject" maxlength="100" placeholder="Payment declined but charged">
+        <span class="char-counter"><span id="subjectCount">0</span>/100</span>
+      </div>
+
+      <div class="field">
+        <span class="field-label">Details (optional)</span>
+        <textarea class="full" id="details" maxlength="500" placeholder="I was charged but the checkout page showed the payment as declined."></textarea>
+        <span class="char-counter"><span id="detailsCount">0</span>/500</span>
+      </div>
+
+      <div class="field">
+        <span class="field-label">Urgency</span>
+        <div class="segmented" id="urgency">
+          <button type="button" data-value="low">Low</button>
+          <button type="button" data-value="medium" class="selected medium">Medium</button>
+          <button type="button" data-value="high">High</button>
+        </div>
+      </div>
+
+      <button class="btn btn-primary btn-block" id="submitBtn" disabled>Submit Ticket</button>
+      <div class="inline-status" id="statusLine"></div>
+    </div>
+  </div>
+
+  <div id="successView" class="content" hidden>
+    <div class="success-state">
+      <div class="success-check">
+        <svg class="icon" viewBox="0 0 24 24" style="width:32px;height:32px"><path d="M5 12l5 5L20 6"/></svg>
+      </div>
+      <h2>Your ticket has been submitted!</h2>
+      <p id="successTicketNumber"></p>
+      <p>We'll look into your request and keep you updated. You can follow the status in your tickets.</p>
+      <div class="success-actions">
+        <button class="btn btn-primary btn-block" id="viewTicketBtn">View Ticket</button>
+        <button class="btn btn-secondary btn-block" id="createAnotherBtn">Create Another Ticket</button>
+      </div>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="/" class="active">
+      <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
+      New Ticket
+    </a>
+    <a href="/tickets">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M4 8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4z"/></svg>
+      My Tickets
+    </a>
+  </nav>
+</div>
+
+<script>
+  const serviceSelect = document.getElementById('service');
+  const subjectInput = document.getElementById('subject');
+  const detailsInput = document.getElementById('details');
+  const urgencyGroup = document.getElementById('urgency');
+  const submitBtn = document.getElementById('submitBtn');
+  const generateBtn = document.getElementById('generateBtn');
+  const statusLine = document.getElementById('statusLine');
+  const formView = document.getElementById('formView');
+  const successView = document.getElementById('successView');
+
+  let urgency = 'medium';
+  let lastTicketId = null;
+
+  function shortId(ticketId) {
+    return '#' + ticketId.replace(/-/g, '').slice(0, 5).toUpperCase();
+  }
+
+  function getCookie(name) {
+    const match = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
+    return match ? match[1] : null;
+  }
+
+  const userId = getCookie('user_id');
+  if (userId) document.getElementById('userGreeting').textContent = `User#${userId}`;
+
+  const tier = getCookie('tier');
+  if (tier) {
+    const badge = document.getElementById('tierBadge');
+    badge.textContent = tier.charAt(0).toUpperCase() + tier.slice(1);
+    badge.classList.add('tier-' + tier);
+    badge.hidden = false;
+  }
+
+  subjectInput.addEventListener('input', () => {
+    document.getElementById('subjectCount').textContent = subjectInput.value.length;
+    updateSubmitState();
+  });
+  detailsInput.addEventListener('input', () => {
+    document.getElementById('detailsCount').textContent = detailsInput.value.length;
+  });
+  function setUrgency(value) {
+    urgencyGroup.querySelectorAll('button').forEach(b => b.classList.remove('selected', 'low', 'medium', 'high'));
+    const btn = urgencyGroup.querySelector(`[data-value="${value}"]`) || urgencyGroup.querySelector('[data-value="medium"]');
+    btn.classList.add('selected', btn.dataset.value);
+    urgency = btn.dataset.value;
+  }
+
+  urgencyGroup.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => setUrgency(btn.dataset.value));
+  });
+
+  serviceSelect.addEventListener('change', updateSubmitState);
+
+  function updateSubmitState() {
+    submitBtn.disabled = !serviceSelect.value || subjectInput.value.trim().length === 0;
+  }
+
+  // TICKET_SAMPLES is injected by routes/portal.py's GET / handler. The page
+  // is also reachable directly at /static/new-ticket.html (bypassing that
+  // injection), so degrade quietly instead of throwing if it's missing.
+  if (!window.TICKET_SAMPLES) {
+    generateBtn.disabled = true;
+  } else {
+    generateBtn.addEventListener('click', () => {
+      const services = Object.keys(window.TICKET_SAMPLES);
+      const service = services[Math.floor(Math.random() * services.length)];
+      const samples = window.TICKET_SAMPLES[service] || [];
+      if (!samples.length) return;
+      const sample = samples[Math.floor(Math.random() * samples.length)];
+      serviceSelect.value = service;
+      subjectInput.value = sample.subject;
+      document.getElementById('subjectCount').textContent = subjectInput.value.length;
+      detailsInput.value = sample.details || '';
+      document.getElementById('detailsCount').textContent = detailsInput.value.length;
+      setUrgency(sample.urgency);
+      updateSubmitState();
+      statusLine.textContent = 'Suggested ✓';
+      setTimeout(() => { if (statusLine.textContent === 'Suggested ✓') statusLine.textContent = ''; }, 2000);
+    });
+  }
+
+  submitBtn.addEventListener('click', async () => {
+    submitBtn.disabled = true;
+    statusLine.textContent = 'Submitting…';
+    try {
+      const res = await fetch('/api/tickets', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          service: serviceSelect.value,
+          subject: subjectInput.value.trim(),
+          details: detailsInput.value.trim() || null,
+          urgency,
+        }),
+      });
+      if (!res.ok) throw new Error('Request failed');
+      const ticket = await res.json();
+      lastTicketId = ticket.ticket_id;
+      statusLine.textContent = '';
+      document.getElementById('successTicketNumber').textContent = 'Ticket ' + shortId(ticket.ticket_id);
+      formView.hidden = true;
+      successView.hidden = false;
+    } catch (e) {
+      statusLine.textContent = "We couldn't submit your ticket. Please try again.";
+    } finally {
+      updateSubmitState();
+    }
+  });
+
+  document.getElementById('viewTicketBtn').addEventListener('click', () => {
+    if (lastTicketId) window.location.href = '/tickets/' + lastTicketId;
+  });
+
+  document.getElementById('createAnotherBtn').addEventListener('click', () => {
+    serviceSelect.value = '';
+    subjectInput.value = '';
+    detailsInput.value = '';
+    document.getElementById('subjectCount').textContent = '0';
+    document.getElementById('detailsCount').textContent = '0';
+    setUrgency('medium');
+    lastTicketId = null;
+    successView.hidden = true;
+    formView.hidden = false;
+    updateSubmitState();
+  });
+</script>
+</body>
+</html>

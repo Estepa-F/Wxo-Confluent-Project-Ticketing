@@ -1,0 +1,22 @@
+spec_version: v1
+kind: control
+control:
+  artifact_name: Content Guardrails
+  name: escalation_guardrails
+  display_name: Content guardrails - escalation agent
+  description: Blocks prompt-injection and inappropriate content in tickets sent to the escalation agent.
+  hooks:
+    - agent_pre_invoke
+    - agent_post_invoke
+  priority: 20
+  config:
+    enabled:
+      hap: false
+      harm: true
+      violence: true
+      jailbreak: true
+      social_bias: true
+      sexual_content: true
+    block_message: "Ticket blocked by content guardrails: no draft generated. Please review it manually."
+  agent_names:
+    - escalation_agent
