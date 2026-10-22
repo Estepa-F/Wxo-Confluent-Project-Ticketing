@@ -111,15 +111,15 @@
       <div class="panel ai-panel" id="aiPanel" hidden>
         <div class="ai-head">
           <div>
-            <div class="panel-title" style="margin-bottom:2px;">Proposition watsonx Orchestrate</div>
-            <div class="ai-sub" id="aiSub">Agent d'escalade · geste commercial calculé par l'agent AWS · à valider avant envoi</div>
+            <div class="panel-title" style="margin-bottom:2px;">watsonx Orchestrate proposal</div>
+            <div class="ai-sub" id="aiSub">Escalation agent · goodwill gesture from the AWS agent · review before sending</div>
           </div>
           <span class="badge" id="aiStatus"></span>
         </div>
         <div id="aiBody"></div>
         <div class="ai-actions">
-          <button class="btn btn-primary" id="aiUseBtn" hidden>Utiliser cette réponse</button>
-          <button class="btn btn-secondary" id="aiRequestBtn">Demander une proposition</button>
+          <button class="btn btn-primary" id="aiUseBtn" hidden>Use this reply</button>
+          <button class="btn btn-secondary" id="aiRequestBtn">Request a proposal</button>
         </div>
       </div>
 
@@ -178,7 +178,7 @@
   }
   // Same short-form ticket number as tickets.html/ticket-detail.html's
   // shortId() -- there is no real sequential ticket number in this
-  // system, only a UUID (spec: specs/ticket-management/specs.md section 6).
+  // system, only a UUID (spec: docs/specs/ticket-management/specs.md section 6).
   function shortId(ticketId) {
     return '#' + ticketId.replace(/-/g, '').slice(0, 5).toUpperCase();
   }
@@ -257,7 +257,7 @@
           <span class="meta-text">${waitingSince(t.escalated_at)}</span>
           ${t.sentiment ? `<span class="badge badge-sentiment-${t.sentiment}">${SENTIMENT_LABEL[t.sentiment]}</span>` : ''}
           ${t.synthetic ? `<span class="badge badge-synthetic">Synthetic</span>` : ''}
-          ${t.ai_draft_status === 'ready' ? `<span class="badge badge-ai">Proposition prête</span>` : ''}
+          ${t.ai_draft_status === 'ready' ? `<span class="badge badge-ai">Proposal ready</span>` : ''}
           ${t.ai_draft_status === 'pending' ? `<span class="badge">Orchestrate…</span>` : ''}
         </div>
         <div class="preview-text">${escapeHtml(t.escalation_message || '')}</div>
@@ -359,14 +359,14 @@
     if (draftPoll) { clearTimeout(draftPoll); draftPoll = null; }
 
     if (!draft) {
-      status.textContent = 'Aucune';
-      body.innerHTML = '<div class="ai-sub">Pas encore de proposition pour ce ticket.</div>';
-      reqBtn.textContent = 'Demander une proposition';
+      status.textContent = 'None';
+      body.innerHTML = '<div class="ai-sub">No proposal for this ticket yet.</div>';
+      reqBtn.textContent = 'Request a proposal';
       return;
     }
     if (draft.status === 'pending') {
-      status.textContent = 'En cours…';
-      body.innerHTML = '<div class="ai-sub">L\'agent d\'escalade masque les données personnelles, consulte l\'agent AWS et rédige une proposition…</div>';
+      status.textContent = 'In progress…';
+      body.innerHTML = '<div class="ai-sub">The escalation agent masks personal data, consults the AWS agent and drafts a proposal…</div>';
       reqBtn.disabled = true;
       draftPoll = setTimeout(() => {
         if (currentTicketId) adminGet(`/admin/tickets/${currentTicketId}`).then(renderDetail).catch(() => {});
@@ -374,24 +374,24 @@
       return;
     }
     if (draft.status === 'error') {
-      status.textContent = 'Erreur';
-      body.innerHTML = `<div class="ai-sub">La proposition n'a pas pu être générée : ${escapeHtml(draft.error || '')}</div>`;
-      reqBtn.textContent = 'Réessayer';
+      status.textContent = 'Error';
+      body.innerHTML = `<div class="ai-sub">The proposal could not be generated: ${escapeHtml(draft.error || '')}</div>`;
+      reqBtn.textContent = 'Retry';
       return;
     }
-    status.textContent = draft.seconds ? `Prête · ${draft.seconds} s` : 'Prête';
+    status.textContent = draft.seconds ? `Ready · ${draft.seconds} s` : 'Ready';
     const block = (title, text, cls) => text ? `
       <div class="ai-block">
         <div class="ai-block-title">${title}</div>
         <div class="ai-text ${cls || ''}">${escapeHtml(text)}</div>
       </div>` : '';
     body.innerHTML =
-      block('Réponse suggérée', draft.reponse_suggeree, 'ai-reply') +
-      block('Geste commercial proposé', draft.geste_commercial) +
-      block('Note pour le conseiller', draft.note_conseiller) +
-      (draft.via_topic ? `<div class="ai-sub" style="margin-top:10px;">Publiée dans le topic Confluent <strong>${escapeHtml(draft.via_topic)}</strong></div>` : '');
+      block('Suggested reply', draft.reponse_suggeree, 'ai-reply') +
+      block('Proposed goodwill gesture', draft.geste_commercial) +
+      block('Note for the advisor', draft.note_conseiller) +
+      (draft.via_topic ? `<div class="ai-sub" style="margin-top:10px;">Published to the Confluent topic <strong>${escapeHtml(draft.via_topic)}</strong></div>` : '');
     useBtn.hidden = !draft.reponse_suggeree;
-    reqBtn.textContent = 'Nouvelle proposition';
+    reqBtn.textContent = 'New proposal';
   }
 
   document.getElementById('aiUseBtn').addEventListener('click', () => {
@@ -412,7 +412,7 @@
   });
 
   function renderTimeline(events) {
-    // Oldest first -- spec: specs/ticket-management/specs.md section 3,
+    // Oldest first -- spec: docs/specs/ticket-management/specs.md section 3,
     // matching ticket-lifecycle/spec.md section 11's own convention.
     document.getElementById('detailTimeline').innerHTML = events.map(evt => {
       const meta = EVENT_META[evt.type] || { label: evt.type, dot: 'dot-blue', fallback: '' };

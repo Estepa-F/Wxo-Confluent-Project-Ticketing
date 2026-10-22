@@ -1,6 +1,8 @@
 # Support Ops Copilot (act 4)
 
-watsonx Orchestrate agent that answers in French about the current state of support,
+> Deployed automatically by [`setup_demo.sh`](../../setup_demo.sh) (steps 6 to 8). The manual steps below are for reference.
+
+watsonx Orchestrate agent that answers in English about the current state of support,
 read live from Confluent topics via the Real-Time Context Engine (RTCE).
 
 ## 1. Confluent side (console)
@@ -44,7 +46,7 @@ orchestrate agents deploy -n support_ops_copilot
 ```
 
 Alternative without CLI: in the interface, MCP catalogue → "IBM Confluent
-Real-Time Context Engine" → same address and key, as Daniel did.
+Real-Time Context Engine" → same address and key.
 
 ## 3. Demo questions
 

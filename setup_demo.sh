@@ -8,7 +8,7 @@
 #   -> app (copilot bubble, escalation agent wiring) -> checks
 #
 # Prerequisite: deploy.py stages base, app and intelligence (agent enabled)
-# already applied from this folder (see README, "Deployment").
+# already applied from this folder (see docs/installation.md, section 3).
 #
 # Usage, from the project root:
 #   cp orchestrate/wxo.env.example orchestrate/wxo.env   # then fill it in
@@ -80,7 +80,7 @@ step() { STEP_N="$1"; printf '\n\033[1m=== %s. %s ===\033[0m\n' "$1" "$2"; }
 require_state() {   # refuses to run Terraform without the state of the deployed environment
   local f="terraform/$1/terraform.tfstate"
   if [ ! -s "$f" ] || ! python3 -c 'import json,sys; sys.exit(0 if json.load(open(sys.argv[1])).get("resources") else 1)' "$f"; then
-    echo "STOP: $f missing or empty. Run the deploy.py stages first (see README)," >&2
+    echo "STOP: $f missing or empty. Run the deploy.py stages first (docs/installation.md)," >&2
     echo "or run this script in the folder where the demo was deployed. Without the" >&2
     echo "state, Terraform would recreate the whole environment." >&2
     exit 1
@@ -123,7 +123,7 @@ need orchestrate "venv with ibm-watsonx-orchestrate==2.17.0, activated"
 echo "AWS account: $(aws sts get-caller-identity --query Account --output text)  (profile $AWS_PROFILE)"
 cat <<'TXT'
 Manual steps to do BEFORE (consoles, once):
-  - deploy.py: stages base, app and intelligence applied, triage agent enabled (README).
+  - deploy.py: stages base, app and intelligence applied, triage agent enabled (docs/installation.md).
   - Bedrock (us-east-1): access to Claude Sonnet 4.5 granted (Model catalog > Submit use case).
   - Confluent: Real-Time Context Engine enabled on tickets.agent-actions,
     tickets.escalation-drafts and tickets.metrics; RTCE_URL / RTCE_KEY /

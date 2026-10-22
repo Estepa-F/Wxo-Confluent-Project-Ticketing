@@ -1,89 +1,95 @@
-# Real-Time AI: Confluent Intelligence & watsonx Orchestrate
+<h1 align="center">Real-Time AI: Confluent Intelligence × watsonx Orchestrate</h1>
+<p align="center">
+<strong>From a customer ticket to a governed agent.<br>
+  Fresh data from Confluent. Controlled action from watsonx Orchestrate.</strong>
+</p>
+<!-- BADGES -->
+<p align="center">
+<img src="https://img.shields.io/badge/version-1.0.0-blue.svg" alt="Version">
+<img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License">
+<img src="https://img.shields.io/badge/python-3.12+-blue.svg" alt="Python">
+<img src="https://img.shields.io/badge/Confluent_Cloud-Kafka_·_Flink-0A3D62.svg?logo=apachekafka&logoColor=white" alt="Confluent Cloud">
+<img src="https://img.shields.io/badge/Apache_Flink-SQL_·_Streaming_Agents-E6526F.svg?logo=apacheflink&logoColor=white" alt="Apache Flink">
+<img src="https://img.shields.io/badge/IBM-watsonx_Orchestrate-052FAD.svg?logo=ibm&logoColor=white" alt="IBM watsonx Orchestrate">
+<img src="https://img.shields.io/badge/AWS-Bedrock_·_AgentCore-232F3E.svg?logo=amazonwebservices&logoColor=white" alt="AWS Bedrock">
+<img src="https://img.shields.io/badge/Terraform-844FBA.svg?logo=terraform&logoColor=white" alt="Terraform">
+</p>
+<!-- CTA VIDEO: replace VIDEO_URL with the YouTube link once the video is published -->
+<p align="center">
+<a href="VIDEO_URL">
+<img src="https://img.shields.io/badge/▶️_Watch_Demo_on_YouTube-red?style=for-the-badge&logo=youtube&logoColor=white" alt="Watch demo on YouTube" height="50">
+</a>
+  &nbsp;&nbsp;
+  <a href="https://www.linkedin.com/in/estepa/">
+<img src="https://img.shields.io/badge/💬_Discuss_on_LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="Discuss on LinkedIn" height="50">
+</a>
+</p>
+<p align="center">
+<em>Live demo presented at Data Streaming World Tour Paris, October 1, 2026.</em>
+</p>
 
-> **Data Streaming World Tour Paris 2026 — live demo**
->
-> From a customer ticket to a governed agent: Confluent Cloud processes every support ticket in real time (Kafka, Flink SQL, Streaming Agents, Real-Time Context Engine), and IBM watsonx Orchestrate makes agents act under control (escalation agent, agents on AWS, controls, human in the loop, end-to-end traces).
+A customer opens a support ticket. Confluent triages it in the stream, watsonx Orchestrate prepares the answer with an agent running on AWS, a human validates it, and every step stays governed and traced.
 
----
+The project combines:
+- **Confluent Cloud**: Kafka, Schema Registry, Flink SQL with AI functions, Streaming Agents, Real-Time Context Engine
+- **IBM watsonx Orchestrate**: native agents, controls, observability, agent directory
+- **AWS**: the support portal (ECS, CloudFront), Bedrock models, two partner agents on Bedrock AgentCore (A2A)
 
-## What the demo shows
+## 🎯 The problem
 
-An e-commerce customer opens a support ticket. We follow it end to end, in four acts:
+Support teams want AI agents, but two things get in the way:
 
-| Act | What happens | Built with |
-|---|---|---|
-| **1. Triage in the stream** | The ticket is published to Kafka, enriched with the live service status and the customer's sentiment, the support load is forecast, and a Streaming Agent decides: resolve automatically or escalate. | Kafka, Schema Registry, Flink SQL (`AI_SENTIMENT`, `ML_FORECAST`, `AI_RUN_AGENT`), MCP tools exposed by the app |
-| **2. Escalation, human in the loop** | For an escalated ticket, the Orchestrate escalation agent drafts a reply and asks the Customer Relations agent on AWS for a goodwill gesture. The support advisor reviews, edits and sends. | watsonx Orchestrate native agent, AWS Bedrock AgentCore agent (A2A), `/support-admin` console |
-| **3. Governance** | Personal data is masked before the model sees it, prompt-injection attempts in tickets are blocked, every step is traced, and external agents are registered in one directory. | Orchestrate controls (PII filter, content guardrails), Observability, AI Gateway / agent directory |
-| **4. Ops copilot on live context** | The support manager asks a copilot about current escalations and volumes. It reads the Kafka topics live, and hands goodwill-policy questions to a second AWS agent. | Confluent Real-Time Context Engine (MCP), Orchestrate copilot, AWS Goodwill Policy Advisor as collaborator |
+- 🕐 **Stale context.** Tickets are exported in batches; the agent decides on yesterday's data and misses the incident happening right now.
+- 🔓 **Agents without control.** An agent that reads customer messages can leak personal data, be hijacked by a fake ticket, or promise a refund nobody approved.
+- 🧩 **Agents everywhere.** Each team builds agents on its own platform, with no single place to see or govern them.
+
+## 💡 The solution
+
+Four acts, one ticket:
+
+1. **Triage in the stream (Confluent).** The ticket becomes a Kafka event, is enriched with the live service status and the customer's sentiment, the support load is forecast, and a Streaming Agent decides: resolve or escalate.
+2. **Escalation with a human in the loop (Orchestrate + AWS).** The escalation agent drafts a reply and asks the Customer Relations agent on AWS for a goodwill gesture. The advisor reviews, edits and sends. No agent answers the customer on its own.
+3. **Governance (Orchestrate).** Personal data is masked and injection attempts are blocked before the model sees the ticket; every step is traced; external agents are registered in one directory.
+4. **Ops copilot on live context (Confluent + Orchestrate).** The support manager asks a copilot that reads the Kafka topics live, and hands policy questions to a second AWS agent.
+
+> Confluent turns events into decisions. watsonx Orchestrate turns decisions into controlled actions.
+
+## 🏗️ Architecture
 
 ```
- Customer / generator
-        │ POST /api/tickets
-        ▼
- ┌───────────────────────────────┐   MCP tools (Basic auth)   ┌─────────────────────────────────────┐
- │ support_portal (FastAPI)      │◄───────────────────────────│ Confluent Cloud                     │
- │ AWS ECS Express + CloudFront  │── tickets.raw ────────────►│  Flink: enrichment, ML_FORECAST,    │
- │ portal · dashboard · admin    │◄── tickets.agent-actions ──│  triage_agent (AI_RUN_AGENT)        │
- └──────────────┬────────────────┘                            │  Real-Time Context Engine           │
-                │ escalated ticket (API call)                 └──────────────┬──────────────────────┘
-                │                                                            │ MCP
-                ▼                                                            ▼
- ┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
- │ IBM watsonx Orchestrate                                                                          │
- │  escalation_agent ──(A2A tool)──► Goodwill Gesture agent (AWS AgentCore)                         │
- │     controls: PII filter, content guardrails                                                     │
- │     the app publishes each draft to tickets.escalation-drafts                                    │
- │  support_ops_copilot ──(collaborator, A2A)──► Goodwill Policy Advisor (AWS AgentCore)            │
- │  Observability, agent directory, AI Gateway                                                      │
- └──────────────────────────────────────────────────────────────────────────────────────────────────┘
+ Customer
+    │ ticket
+    ▼
+┌──────────────────┐   tickets.raw    ┌──────────────────────────────────────────┐
+│ support_portal   │ ───────────────► │ Confluent Cloud                          │
+│ AWS ECS + CDN    │                  │  Flink SQL · AI_SENTIMENT · ML_FORECAST  │
+│                  │ ◄─────────────── │  triage_agent (Streaming Agent + MCP)    │
+└──────────────────┘   agent-actions  │  Real-Time Context Engine                │
+   │          ▲                       └─────────────────────┬────────────────────┘
+   │escalated │draft                                        │ MCP
+   ▼          │                                             ▼
+┌────────────────────────────────────────────────────────────────────────────────┐
+│ IBM watsonx Orchestrate                                                        │
+│  escalation_agent ── A2A tool ──► Goodwill Gesture agent (AWS AgentCore)       │
+│    controls: PII filter · content guardrails · human review                    │
+│  support_ops_copilot ── A2A ──► Goodwill Policy Advisor (AWS AgentCore)        │
+└────────────────────────────────────────────────────────────────────────────────┘
 ```
 
----
+Detailed diagrams, components and topics: [`docs/architecture.md`](docs/architecture.md).
 
-## Repository layout
+## Project structure
 
-```
-.
-├── app/                         # FastAPI app (one Docker image): portal, dashboard, support admin, MCP server
-│   └── support_portal/
-│       ├── generator/           # Synthetic baseline + on-cue burst generator
-│       ├── incidents/           # Known-issues KB + service-status state
-│       ├── mcp/                 # MCP server (search_known_issues, get_account_context)
-│       ├── messaging/           # Kafka producer + consumers (Avro + JSON Schema)
-│       ├── orchestrate/         # Calls the escalation agent, parses its drafts
-│       ├── tickets/             # Ticket lifecycle
-│       └── static/              # HTML/CSS/JS front-ends, copilot bubble
-├── terraform/
-│   ├── base/                    # Confluent environment, cluster, topics, service account
-│   ├── app-hosting/             # AWS ECR, ECS Express, CloudFront
-│   └── confluent-intelligence/  # Flink statements, Bedrock connection, triage agent, RTCE key
-├── orchestrate/
-│   ├── agents/                  # escalation_agent.yaml
-│   ├── controls/                # pii_control.yaml, escalation_guardrails.yaml
-│   ├── copilot/                 # Support Ops Copilot + RTCE MCP toolkit
-│   ├── tools/                   # goodwill_tool.py (A2A call to the AWS agent)
-│   ├── external-agents/
-│   │   ├── aws-compensation/    # Goodwill Gesture agent (AgentCore, A2A)
-│   │   └── aws-policy-advisor/  # Goodwill Policy Advisor (AgentCore, A2A, traces to Orchestrate)
-│   ├── rebuild_wxo.sh           # Builds all Orchestrate objects on one instance
-│   ├── add_policy_advisor.sh    # Adds the advisor as a collaborator of the copilot
-│   ├── make_copilot_embed.py    # Generates the copilot bubble config for the app
-│   └── wxo.env.example          # Configuration template for the Orchestrate/AWS part
-├── specs/                       # Detailed specs (ticket lifecycle, dashboard, admin)
-├── deploy.py                    # Confluent + AWS app deployment (three Terraform stages)
-├── setup_demo.sh                # AWS agents + Orchestrate + app wiring, in one command
-├── DEPLOYMENT.md                # Step-by-step reproduction guide
-└── PROJECT_SPEC.md              # Design notes and decision log
-```
-
----
+- [`app/`](app/) — FastAPI support portal: customer form, presenter dashboard, support admin console, MCP server
+- [`terraform/`](terraform/) — Confluent foundation, AWS app hosting, Flink statements and triage agent
+- [`orchestrate/`](orchestrate/) — watsonx Orchestrate agents, controls, tools, copilot, and the two AWS agents
+- [`docs/`](docs/) — installation, architecture, governance, demo scenario, troubleshooting, slide deck
+- [`deploy.py`](deploy.py) — deploys Confluent and the app (three Terraform stages)
+- [`setup_demo.sh`](setup_demo.sh) — deploys the AWS agents and Orchestrate, and wires the app, in one command
 
 ## Quick start
 
-Full instructions, verifications and troubleshooting are in [`DEPLOYMENT.md`](DEPLOYMENT.md).
-
-**Try the app locally** (no cloud needed, Kafka calls are no-ops):
+### 1. Try the app locally
 
 ```bash
 cd app
@@ -91,46 +97,69 @@ uv run python -m support_portal --disable-generator
 # http://localhost:8000 · /dashboard · /support-admin
 ```
 
-**Deploy everything:**
+### 2. Configure
 
 ```bash
-cp credentials.env.example credentials.env                 # Confluent org key, AWS profile, regions
-python3 deploy.py --stage base                             # Confluent foundation
-python3 deploy.py --stage app                              # app on AWS
-python3 deploy.py --stage intelligence                     # Flink, then again with the agent enabled
-# Confluent console: enable the Real-Time Context Engine on the topics (manual)
-
-cp orchestrate/wxo.env.example orchestrate/wxo.env         # Orchestrate instance, RTCE values
-(cd orchestrate && uv sync) && source orchestrate/.venv/bin/activate   # ADK 2.17
-bash setup_demo.sh                                         # AWS agents, Orchestrate, app wiring
+cp credentials.env.example credentials.env            # Confluent org key, AWS profile, regions
+cp orchestrate/wxo.env.example orchestrate/wxo.env    # Orchestrate instance, RTCE key
 ```
 
-**Tear down:** see [`DEPLOYMENT.md`, section 9](DEPLOYMENT.md#9-tear-down). The Flink pool, the ECS service, AgentCore and the Bedrock calls from the generator cost money while they run.
+### 3. Deploy
+
+```bash
+python3 deploy.py --stage base             # Confluent environment, cluster, topics
+python3 deploy.py --stage app              # portal on AWS
+python3 deploy.py --stage intelligence     # Flink, then again with the triage agent enabled
+# Confluent console: enable the Real-Time Context Engine on the topics (manual step)
+
+(cd orchestrate && uv sync) && source orchestrate/.venv/bin/activate
+bash setup_demo.sh                         # AWS agents, Orchestrate, app wiring
+```
+
+Step-by-step guide with checks: [`docs/installation.md`](docs/installation.md). The Flink pool, ECS, AgentCore and Bedrock calls cost money while they run: [tear down](docs/installation.md#9-tear-down) after rehearsals.
+
+## Documentation
+
+### Per folder
+
+- [`app/README.md`](app/README.md)
+- [`terraform/README.md`](terraform/README.md)
+- [`orchestrate/README.md`](orchestrate/README.md), with [`agents/`](orchestrate/agents/README.md), [`controls/`](orchestrate/controls/README.md), [`tools/`](orchestrate/tools/README.md), [`copilot/`](orchestrate/copilot/README.md) and the two [AWS agents](orchestrate/external-agents/)
+
+### Guides in [`docs/`](docs/)
+
+- [`docs/installation.md`](docs/installation.md) — deploy everything on your own accounts
+- [`docs/architecture.md`](docs/architecture.md) — end-to-end and app diagrams, components, topics, design choices
+- [`docs/governance.md`](docs/governance.md) — schemas, controls, human in the loop, traces, agents on other platforms
+- [`docs/scenario-demo.md`](docs/scenario-demo.md) — the four acts minute by minute: what to show, what to say
+- [`docs/troubleshooting.md`](docs/troubleshooting.md) — symptoms and fixes
+- [`docs/project-spec.md`](docs/project-spec.md) and [`docs/specs/`](docs/specs/) — design decisions and detailed specs
+- [`docs/DSWT2026-demo-walkthrough.pptx`](docs/DSWT2026-demo-walkthrough.pptx) — slide deck built from the demo, with the script in the speaker notes
+
+## 🔒 Security
+
+Never commit `credentials.env`, `app/.env`, `orchestrate/wxo.env`, `*.tfstate`, `.bedrock_agentcore.yaml`, `.bob/mcp.json` or `copilot-config.json` (all in `.gitignore`). Terraform state files hold API keys in plain text. `EMBED_DISABLE_SECURITY=true` opens the embedded chat of the **whole** Orchestrate instance: use it only on a dedicated demo instance.
+
+## 🎥 External resources
+
+- 🎬 [Full demo video on YouTube](VIDEO_URL)
+- 💼 [LinkedIn](https://www.linkedin.com/in/estepa/)
+
+## ⚖️ License
+
+This project is distributed under the MIT license. See [LICENSE](LICENSE) for details.
+
+## 🙏 Credits
+
+Built by François Estepa (IBM) and Daniel Petisme (Confluent) with:
+- [Confluent Cloud](https://www.confluent.io/confluent-cloud/): Kafka, Flink SQL, Streaming Agents, Real-Time Context Engine
+- [IBM watsonx Orchestrate](https://www.ibm.com/products/watsonx-orchestrate) and its [ADK](https://developer.watson-orchestrate.ibm.com/)
+- [Amazon Bedrock](https://aws.amazon.com/bedrock/) and [Bedrock AgentCore](https://aws.amazon.com/bedrock/agentcore/), with [Strands Agents](https://strandsagents.com/)
+- [FastAPI](https://fastapi.tiangolo.com/), [Terraform](https://www.terraform.io/)
 
 ---
 
-## Security
-
-- Never commit `credentials.env`, `app/.env`, `orchestrate/wxo.env`, `*.tfstate`, `.bedrock_agentcore.yaml` or `app/support_portal/static/copilot-config.json`. They are in `.gitignore`.
-- Terraform state files contain API keys and passwords in plain text: never share them.
-- `.bob/mcp.json` (IBM Bob MCP configuration) holds Basic credentials: copy `.bob/mcp.json.example` and keep the real file local.
-- `EMBED_DISABLE_SECURITY=true` turns off embedded-chat security on the **whole** Orchestrate instance. Use it only on a dedicated demo instance.
-
----
-
-## Architecture notes
-
-- **Single app, multiple surfaces** — the ticket form, the presenter dashboard and the support admin queue are routes of one FastAPI process.
-- **MCP mount at `/` (catch-all, last)** — mounting at `/mcp` makes Starlette 307-redirect bare POSTs, which Confluent's Flink MCP client does not follow.
-- **MCP Basic auth** — unauthenticated bot traffic probed the open `/mcp` endpoint within hours of the first deployment.
-- **`tickets.metrics` uses Avro** — `ML_FORECAST` returns a `TIMESTAMP(6)` field that the JSON Schema format cannot represent.
-- **The AWS goodwill agent is called as a tool, not a collaborator** — as a collaborator it takes over the turn and the escalation agent can no longer write its synthesis. The policy advisor, on the other hand, is a collaborator of the copilot (A2A).
-- **Controls before the model** — the PII filter and the content guardrails run on `agent_pre_invoke`: the model never sees the raw personal data or the injection attempt.
-
-See [`PROJECT_SPEC.md`](PROJECT_SPEC.md) for the full decision log.
-
----
-
-## License
-
-This project is a conference demo. No license is granted for production use.
+<p align="center">
+  ⭐ If this project inspired you, star the repo: it helps other architects find it.<br>
+  💬 Questions? Open an issue or reach out on <a href="https://www.linkedin.com/in/estepa/">LinkedIn</a>.
+</p>

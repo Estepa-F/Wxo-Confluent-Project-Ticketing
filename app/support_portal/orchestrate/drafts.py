@@ -74,20 +74,19 @@ def ticket_facts(record) -> dict:
 
 
 def build_message(record, triage_message: str | None, facts: dict | None = None) -> str:
-    """Same shape as the manual chat test: French labels, technical values
-    in English."""
+    """Same shape as the manual chat test: one "label: value" line per fact."""
     f = facts or ticket_facts(record)
     lines = [
-        f"Ticket escaladé {f['ticket_number']}",
-        f"Tier : {f['tier']}",
-        f"Service : {record.service}",
-        f"État du service : {f['service_status']}",
-        f"Problème récurrent sur ce service : {'true' if f['recurring'] else 'false'}",
-        f"Objet : {record.subject}",
-        f"Texte : {record.description or '(aucun détail)'}",
+        f"Escalated ticket {f['ticket_number']}",
+        f"Tier: {f['tier']}",
+        f"Service: {record.service}",
+        f"Service status: {f['service_status']}",
+        f"Recurring issue on this service: {'true' if f['recurring'] else 'false'}",
+        f"Subject: {record.subject}",
+        f"Text: {record.description or '(no details)'}",
     ]
     if triage_message:
-        lines.append(f"Message de l'agent de triage : {triage_message}")
+        lines.append(f"Triage agent message: {triage_message}")
     return "\n".join(lines)
 
 

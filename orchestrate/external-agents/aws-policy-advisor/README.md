@@ -1,6 +1,6 @@
 # AWS Agent "Goodwill Policy Advisor" (AgentCore Runtime, A2A)
 
-Second agent of the Customer Relations team, hosted on AWS. It answers **in prose, in French** questions about the goodwill policy (`charter.md`, the same one as the "Customer Goodwill" agent).
+Second agent of the Customer Relations team, hosted on AWS. It answers **in prose, in English** questions about the goodwill policy (`charter.md`, the same one as the "Customer Goodwill" agent).
 
 It is declared as a **collaborator of the Support Ops Copilot**: Orchestrate hands the turn over to this agent, whose answer is shown directly to the user. This is the opposite of `customer_goodwill_agent`, called as a tool because the escalation agent needs to post-process its JSON.
 

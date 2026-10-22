@@ -1,4 +1,4 @@
-# Ticket metrics/forecast statement, per PROJECT_SPEC.md section 2.4.
+# Ticket metrics/forecast statement, per docs/project-spec.md section 2.4.
 # This CTAS statement auto-creates its backing topic + Schema Registry
 # subject (same pattern as the sibling project's CREATE TABLE statements)
 # -- no confluent_kafka_topic needed for tickets.metrics.

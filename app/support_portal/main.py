@@ -45,7 +45,7 @@ mcp_asgi_app = mcp_server.streamable_http_app(
 
 
 class MCPBasicAuthMiddleware:
-    """Requires HTTP Basic auth on the MCP mount. Per PROJECT_SPEC.md the
+    """Requires HTTP Basic auth on the MCP mount. Per docs/project-spec.md the
     only intended caller is Confluent's Flink AI_RUN_AGENT/mcp_server
     connection -- without this, the mount is a fully open,
     unauthenticated data-lookup surface reachable by anyone (confirmed

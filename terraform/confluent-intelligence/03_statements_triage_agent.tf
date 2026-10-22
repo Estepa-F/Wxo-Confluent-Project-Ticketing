@@ -1,4 +1,4 @@
-# Single TRIAGEAGENT (PROJECT_SPEC.md section 2.5, simplified from four
+# Single TRIAGEAGENT (docs/project-spec.md section 2.5, simplified from four
 # chained agents to one -- Confluent Streaming Agents has no native
 # agent-to-agent handoff/branching primitive, confirmed during planning).
 #

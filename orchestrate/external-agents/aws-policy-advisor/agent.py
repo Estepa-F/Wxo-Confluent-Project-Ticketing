@@ -1,7 +1,7 @@
 """Goodwill Policy Advisor -- AWS Bedrock AgentCore Runtime, A2A protocol.
 
 Second agent of the Customer Relations team (demo story). It answers, in
-plain French, questions about the goodwill policy (charter.md): what gesture
+plain English, questions about the goodwill policy (charter.md): what gesture
 for which case, when a human approval is needed, what is never allowed.
 
 Called by the watsonx Orchestrate Support Ops Copilot as an A2A collaborator:
@@ -63,11 +63,11 @@ model = BedrockModel(
 agent = Agent(
     name="goodwill_policy_advisor",
     description=(
-        "Conseiller politique commerciale de l'équipe Relation client. "
-        "Répond en français aux questions sur la politique de geste "
-        "commercial : quel bon d'achat pour quel tier et quelle gravité, "
-        "ajustements (récurrence, rappel prioritaire), plafond de 30 €, cas "
-        "qui exigent une validation humaine, ce qui est interdit."
+        "Goodwill policy advisor of the Customer Relations team. Answers "
+        "in English questions about the goodwill policy: which voucher for "
+        "which tier and severity, adjustments (recurrence, priority "
+        "callback), the 30 EUR cap, cases that require human approval, and "
+        "what is never allowed."
     ),
     model=model,
     system_prompt=SYSTEM_PROMPT,

@@ -18,15 +18,15 @@ see 2.5/2.6 in particular. The main remaining work is rehearsal and
 tuning — see section 6.
 
 Companion files:
-- `support-triage-architecture.mermaid` — current architecture diagram
+- `docs/architecture.md` — current architecture diagram
   (kept in sync with this spec)
 - `app/support_portal/` — the actual deployed app (see section 2.4; this
   superseded the originally-planned standalone `support_portal_mock.py`)
-- `specs/ticket-lifecycle/spec.md` — detailed spec for the ticket
+- `docs/specs/ticket-lifecycle/spec.md` — detailed spec for the ticket
   lifecycle subsystem (section 2.2): states, UI, demo walkthrough
-- `specs/dashboard/spec.md` — detailed spec for the presenter dashboard's
+- `docs/specs/dashboard/spec.md` — detailed spec for the presenter dashboard's
   Live Triage Stream table (section 2.8)
-- `specs/ticket-management/spec.md` — detailed spec for the Support
+- `docs/specs/ticket-management/spec.md` — detailed spec for the Support
   Admin surface (section 2.8): escalated queue, human reply, retiring
   the old presenter console
 
@@ -96,7 +96,7 @@ activity in real time.
 ### 2.2 Ticket lifecycle — RESOLVED (new subsystem, not in the previous spec)
 Tickets are no longer fire-and-forget. `app/support_portal/tickets/`
 gives every submitted ticket a followable lifecycle, matching
-`specs/ticket-lifecycle/spec.md` (the canonical detailed spec for this
+`docs/specs/ticket-lifecycle/spec.md` (the canonical detailed spec for this
 area — states, UI layout, full demo walkthrough):
 
 - **Model** (`tickets/models.py`): `TicketStatus` is just `open`/`closed`
@@ -572,7 +572,7 @@ dashboard (2.8) and the ticket lifecycle (2.2) via
 - Plain HTML/CSS/vanilla JS (`app/support_portal/static/dashboard.html`),
   no frontend framework; charting via Chart.js loaded from CDN. Detailed
   layout/data-model spec for its Live Triage Stream table:
-  `specs/dashboard/spec.md`.
+  `docs/specs/dashboard/spec.md`.
 - The module split into `dashboard/service.py` (aggregation/state) and
   `dashboard/routes.py` (transport only — `GET /ws/dashboard`), instead
   of one flat `routes/dashboard.py`. `service.py`'s `snapshot()` now
@@ -597,7 +597,7 @@ dashboard (2.8) and the ticket lifecycle (2.2) via
   forecast, live status-page state, and a full-width **Live Triage
   Stream** table (Time/Ticket ID/Service/Sentiment/Action/Ticket, with
   Service/Sentiment/Action filters) replacing the earlier
-  batched-counts activity feed — see `specs/dashboard/spec.md` for the
+  batched-counts activity feed — see `docs/specs/dashboard/spec.md` for the
   detailed layout.
 - **Presenter console retired.** The old `static/console.html`
   (incident flip + burst trigger, driven from its own separate browser
@@ -607,7 +607,7 @@ dashboard (2.8) and the ticket lifecycle (2.2) via
   in `admin/routes.py` are unchanged; only the front end that calls them
   moved.
 - **New: Support Admin surface** (`static/support-admin.html`,
-  `specs/ticket-management/spec.md` is the canonical detailed spec) —
+  `docs/specs/ticket-management/spec.md` is the canonical detailed spec) —
   a human-facing screen for the escalated-ticket queue this system
   otherwise has no way to act on: an escalated queue list (oldest-
   waiting-first, synthetic tickets excluded by default) and a per-ticket
@@ -818,7 +818,7 @@ CloudFront — section 2.9).
    the on-cue spike mode, and registering synthetic tickets as real
    `TicketRecord`s — built (2.3).
 9. ✅ Support Admin (escalated queue, human reply) — built (2.8),
-   per `specs/ticket-management/spec.md`.
+   per `docs/specs/ticket-management/spec.md`.
 10. ⬜ **End-to-end rehearsal, threshold tuning** — the main remaining
     work: tuning `MATCH_THRESHOLD`, confirming the `us-east-1` region
     decision still holds, and deciding whether the fallback-escalation

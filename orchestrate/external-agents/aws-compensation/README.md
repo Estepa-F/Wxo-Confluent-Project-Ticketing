@@ -1,6 +1,6 @@
 # AWS Agent "Customer Goodwill" (AgentCore Runtime, A2A)
 
-Agent for act 1. It decides the commercial gesture for an escalated ticket by applying `charter.md`, and responds in JSON. The Orchestrate escalation agent calls it via A2A 0.3.0, authenticated with OAuth (Cognito).
+Agent for act 2. It decides the commercial gesture for an escalated ticket by applying `charter.md`, and responds in JSON. The Orchestrate escalation agent calls it via A2A 0.3.0, authenticated with OAuth (Cognito).
 
 | File | Role |
 |---|---|
@@ -77,6 +77,6 @@ https://bedrock-agentcore.us-east-1.amazonaws.com/runtimes/<encoded-ARN>/invocat
 agentcore invoke '{"jsonrpc":"2.0","id":"1","method":"message/send","params":{"message":{"kind":"message","role":"user","messageId":"t1","parts":[{"kind":"text","text":"tier: gold\nservice: payments\nservice_status: outage\nrecurring_issue_same_service: true\nissue_summary: paiement refusé à plusieurs reprises pendant la panne"}]}}}'
 ```
 
-Expected response in `artifacts`: a JSON object with a justification in French, `"voucher_eur": 30`, extras `free_shipping` and `priority_callback`, and `"requires_human_approval": false` (example 2 from the charter).
+Expected response in `artifacts`: a JSON object with a justification in English, `"voucher_eur": 30`, extras `free_shipping` and `priority_callback`, and `"requires_human_approval": false` (example 2 from the charter).
 
 In case of a 424 error on invocation, check the agent's CloudWatch logs: they are far more informative than the error code.

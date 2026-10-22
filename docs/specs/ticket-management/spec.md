@@ -2,7 +2,7 @@
 
 ## 1. Goal
 
-Add a "Support Admin" surface so a human can close the loop the AI triage agent starts. Today, per `specs/ticket-lifecycle/spec.md`, a ticket can reach `escalated`, but nothing lets a person see the queue of escalated tickets or answer one — `support_reply` exists as an event type with no way to produce it before this spec (see `app/support_portal/tickets/service.py`'s `apply_support_reply`, added but with no admin-facing queue view yet).
+Add a "Support Admin" surface so a human can close the loop the AI triage agent starts. Today, per `docs/specs/ticket-lifecycle/spec.md`, a ticket can reach `escalated`, but nothing lets a person see the queue of escalated tickets or answer one — `support_reply` exists as an event type with no way to produce it before this spec (see `app/support_portal/tickets/service.py`'s `apply_support_reply`, added but with no admin-facing queue view yet).
 
 This replaces the old "Presenter Console" (`static/console.html`), whose other two features (flip a service's incident status, fire a synthetic ticket burst) are already duplicated inline in the dashboard (`static/dashboard.html`) and add nothing on their own.
 

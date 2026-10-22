@@ -1,4 +1,4 @@
-"""In-memory, thread-safe ticket lifecycle store (spec: specs/ticket-lifecycle/spec.md).
+"""In-memory, thread-safe ticket lifecycle store (spec: docs/specs/ticket-lifecycle/spec.md).
 
 Not Kafka-backed and not persisted -- tickets live only for the process
 lifetime, same trade-off as AccountPool/PortalState. The *decision*
@@ -157,7 +157,7 @@ class TicketStore:
 
     def list_escalated(self, include_synthetic: bool = False) -> list[TicketRecord]:
         """Tickets currently needing a human -- derived from live state
-        (spec: specs/ticket-management/specs.md section 4), not a
+        (spec: docs/specs/ticket-management/specs.md section 4), not a
         separate flag: the ticket's *latest* event must be "escalated",
         meaning nothing (a support_reply, a user_reply, or a close) has
         happened since. Sorted oldest-escalated-first.

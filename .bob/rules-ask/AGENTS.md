@@ -4,11 +4,11 @@ This file provides guidance to agents when working with code in this repository.
 
 ## Where things actually live
 
-- **Ticket lifecycle spec**: `specs/ticket-lifecycle/spec.md` (canonical — not PROJECT_SPEC.md section 2.2)
-- **Dashboard spec**: `specs/dashboard/spec.md`
-- **Support Admin spec**: `specs/ticket-management/spec.md`
-- **Architecture diagram**: `support-triage-architecture.mermaid`
-- **Deployment guide**: `DEPLOYMENT.md`; one-command Orchestrate/AWS setup: `setup_demo.sh`
+- **Ticket lifecycle spec**: `docs/specs/ticket-lifecycle/spec.md` (canonical — not docs/project-spec.md section 2.2)
+- **Dashboard spec**: `docs/specs/dashboard/spec.md`
+- **Support Admin spec**: `docs/specs/ticket-management/spec.md`
+- **Architecture diagram**: `docs/architecture.md`
+- **Deployment guide**: `docs/installation.md`; one-command Orchestrate/AWS setup: `setup_demo.sh`
 - **All Flink SQL**: inside `.tf` files in `terraform/confluent-intelligence/`, not standalone `.sql` files
 - **Orchestrate agent YAML + setup scripts**: `orchestrate/` in project root (not `app/`) — separate `uv` project with its own `pyproject.toml`
 

@@ -59,12 +59,11 @@ model = BedrockModel(
 agent = Agent(
     name="customer_goodwill_agent",
     description=(
-        "Agent de l'équipe Relation client. À partir du contexte d'un ticket "
-        "escaladé (tier du client, service, état du service, récurrence, "
-        "résumé du problème, sans donnée personnelle), il renvoie le geste "
-        "commercial à proposer sous forme d'objet JSON : montant du bon "
-        "d'achat, extras, validation humaine requise ou non, et justification "
-        "en français citant les règles appliquées."
+        "Customer Relations team agent. From the context of an escalated "
+        "ticket (customer tier, service, service status, recurrence, problem "
+        "summary, no personal data), it returns the goodwill gesture to offer "
+        "as a JSON object: voucher amount, extras, whether human approval is "
+        "required, and a justification in English citing the rules applied."
     ),
     model=model,
     system_prompt=SYSTEM_PROMPT,

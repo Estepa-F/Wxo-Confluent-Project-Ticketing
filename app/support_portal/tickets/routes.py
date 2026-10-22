@@ -1,4 +1,4 @@
-"""Ticket lifecycle HTTP + WebSocket surface (spec: specs/ticket-lifecycle/spec.md).
+"""Ticket lifecycle HTTP + WebSocket surface (spec: docs/specs/ticket-lifecycle/spec.md).
 Ticket creation carries service/subject/details instead of a single
 free-text field; this module owns creation, listing, detail, replies,
 close, and the per-ticket WebSocket. Business logic (the shared store,
