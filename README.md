@@ -27,12 +27,13 @@ An e-commerce customer opens a support ticket. We follow it end to end, in four 
  │ portal · dashboard · admin    │◄── tickets.agent-actions ──│  triage_agent (AI_RUN_AGENT)        │
  └──────────────┬────────────────┘                            │  Real-Time Context Engine           │
                 │ escalated ticket (API call)                 └──────────────┬──────────────────────┘
-                ▼                                                            │ MCP
- ┌───────────────────────────────────────────────────────────────────────────▼──────────────────────┐
+                │                                                            │ MCP
+                ▼                                                            ▼
+ ┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
  │ IBM watsonx Orchestrate                                                                          │
  │  escalation_agent ──(A2A tool)──► Goodwill Gesture agent (AWS AgentCore)                         │
  │     controls: PII filter, content guardrails                                                     │
- │     the app publishes each draft to tickets.escalation-drafts                                     │
+ │     the app publishes each draft to tickets.escalation-drafts                                    │
  │  support_ops_copilot ──(collaborator, A2A)──► Goodwill Policy Advisor (AWS AgentCore)            │
  │  Observability, agent directory, AI Gateway                                                      │
  └──────────────────────────────────────────────────────────────────────────────────────────────────┘
